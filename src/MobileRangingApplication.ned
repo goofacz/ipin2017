@@ -15,14 +15,9 @@
 
 package ipin2017;
 
-//
-// Immediately sends out any message it receives. It can optionally generate
-// a message at the beginning of the simulation, to bootstrap the process.
-//
-simple MobileApplication
+simple MobileRangingApplication like IRangingApplication
 {
-    parameters:        
-        bool sendMsgOnInit = default(false); 
+    parameters:
         
 	gates:
 	    input in;
