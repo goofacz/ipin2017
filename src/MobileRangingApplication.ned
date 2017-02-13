@@ -17,8 +17,6 @@ package ipin2017;
 
 simple MobileRangingApplication like IRangingApplication
 {
-    parameters:
-        
 	gates:
 	    input in;
 	    output out;
