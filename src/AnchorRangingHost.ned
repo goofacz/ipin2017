@@ -21,4 +21,5 @@ module AnchorRangingHost extends RangingHost
         @display("i=device/accesspoint");
         mobilityType = "StationaryMobility";
         applicationType = "AnchorRangingApplication";
+        nic.mac.promiscuous = true;
 }
