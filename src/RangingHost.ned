@@ -19,31 +19,29 @@ import inet.examples.mobility.MobileHost;
 import inet.linklayer.ideal.IdealWirelessNic;
 import inet.networklayer.common.InterfaceTable;
 import inet.networklayer.generic.GenericRoutingTable;
-//
-// TODO auto-generated module
-//
+
 module RangingHost extends MobileHost
 {
     parameters:
         @networkNode();
+        string applicationType;
         *.interfaceTableModule = default(absPath(".interfaceTable"));
-        
+
     gates:
         input radioIn @directIn;
-        
-    submodules:                
+
+    submodules:
         interfaceTable: InterfaceTable;
         
-        routingTable: GenericRoutingTable	{
-         	addressType = "mac";
-        }
+        routingTable: GenericRoutingTable;
         
-        application: MobileApplication;
+        application: <applicationType> like IRangingApplication;
         
         nic: IdealWirelessNic;
         
     connections:
         radioIn --> nic.radioIn;
+        
         nic.upperLayerIn <-- application.out;
         nic.upperLayerOut --> application.in;
 }
