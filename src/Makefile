@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for ipin2017
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I.. -I../../inet/src/inet/linklayer/base -I../../inet/src/inet/common/lifecycle -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
+#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/linklayer/base -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
 #
 
 # Name of target to be created (-o option)
@@ -15,13 +15,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(QTENV_LIBS) $(CMDENV_LI
 #USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH = \
-    -I../../inet/src/inet/linklayer/common \
-    -I../../inet/src \
-    -I.. \
-    -I../../inet/src/inet/linklayer/base \
-    -I../../inet/src/inet/common/lifecycle \
-    -I.
+INCLUDE_PATH = -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/linklayer/base -I.
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -36,7 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/MobileApplication.o $O/RangingHost.o
+OBJS = $O/AnchorRangingApplication.o $O/MobileRangingApplication.o
 
 # Message files
 MSGFILES =
@@ -135,18 +129,26 @@ depend:
 	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES) $(SM_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
-$O/MobileApplication.o: MobileApplication.cc \
+$O/AnchorRangingApplication.o: AnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
-	$(INET_PROJ)/src/inet/common/lifecycle/ILifecycle.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/base/MACFrameBase_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl.h \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
-	MobileApplication.h
-$O/RangingHost.o: RangingHost.cc \
-	RangingHost.h
+	AnchorRangingApplication.h
+$O/MobileRangingApplication.o: MobileRangingApplication.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/base/MACFrameBase_m.h \
+	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl.h \
+	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
+	MobileRangingApplication.h
 
