@@ -15,7 +15,8 @@
 
 package ipin2017.simulations;
 
-import ipin2017.RangingHost;
+import ipin2017.AnchorRangingHost;
+import ipin2017.MobileRangingHost;
 import inet.networklayer.configurator.generic.GenericNetworkConfigurator;
 import inet.physicallayer.idealradio.IdealRadioMedium;
 import inet.visualizer.integrated.IntegratedCanvasVisualizer;
@@ -34,16 +35,11 @@ network Network
         
         radioMedium: IdealRadioMedium;
         
-        hostA: RangingHost	{
+        hostA: AnchorRangingHost	{
             @display("p=50,325");
-            application.sendMsgOnInit = true;
         }
         
-        hostB: RangingHost	{
+        hostB: MobileRangingHost	{
             @display("p=350,325");
-        }
-        
-        hostC: RangingHost	{
-            @display("p=250,325");
         }
 }
