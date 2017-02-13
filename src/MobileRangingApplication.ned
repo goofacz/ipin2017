@@ -15,9 +15,7 @@
 
 package ipin2017;
 
-simple MobileRangingApplication like IRangingApplication
+simple MobileRangingApplication extends RangingApplication
 {
-	gates:
-	    input in;
-	    output out;
+	
 }

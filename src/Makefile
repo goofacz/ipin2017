@@ -30,7 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/AnchorRangingApplication.o $O/MobileRangingApplication.o
+OBJS = $O/RangingApplication.o $O/AnchorRangingApplication.o $O/MobileRangingApplication.o
 
 # Message files
 MSGFILES =
@@ -134,13 +134,16 @@ $O/AnchorRangingApplication.o: AnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
-	$(INET_PROJ)/src/inet/linklayer/base/MACFrameBase_m.h \
-	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl.h \
-	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
-	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
-	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
-	AnchorRangingApplication.h
+	AnchorRangingApplication.h \
+	RangingApplication.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/features.h \
+	MobileRangingApplication.h \
+	RangingApplication.h
+$O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
@@ -150,5 +153,5 @@ $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
-	MobileRangingApplication.h
+	RangingApplication.h
 
