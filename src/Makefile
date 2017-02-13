@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for ipin2017
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/linklayer/base -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
+#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
 #
 
 # Name of target to be created (-o option)
@@ -15,7 +15,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(QTENV_LIBS) $(CMDENV_LI
 #USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH = -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/linklayer/base -I.
+INCLUDE_PATH = -I../../inet/src/inet/linklayer/common -I../../inet/src -I.
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -134,6 +134,7 @@ $O/AnchorRangingApplication.o: AnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	AnchorRangingApplication.h \
 	RangingApplication.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
@@ -141,6 +142,7 @@ $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	MobileRangingApplication.h \
 	RangingApplication.h
 $O/RangingApplication.o: RangingApplication.cc \
@@ -148,7 +150,6 @@ $O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
-	$(INET_PROJ)/src/inet/linklayer/base/MACFrameBase_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl.h \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
