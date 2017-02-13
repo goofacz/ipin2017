@@ -26,20 +26,37 @@ import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 //
 network Network
 {
+    @display("bgb=908,390");
     submodules:
         visualizer: IntegratedCanvasVisualizer {
-            @display("p=580,125");
+            @display("p=128,24");
+        }
+
+        configurator: GenericNetworkConfigurator {
+            @display("p=219,24");
         }
         
-        configurator: GenericNetworkConfigurator;
-        
-        radioMedium: IdealRadioMedium;
-        
-        hostA: AnchorRangingHost	{
-            @display("p=50,325");
+        radioMedium: IdealRadioMedium {
+            @display("p=44,26");
         }
         
-        hostB: MobileRangingHost	{
-            @display("p=350,325");
+        Anchor1: AnchorRangingHost {
+            @display("p=291,136");
+        }
+        
+        Anchor2: AnchorRangingHost {
+            @display("p=510,136");
+        }
+
+        Anchor3: AnchorRangingHost {
+            @display("p=291,348");
+        }
+
+        Anchor4: AnchorRangingHost {
+            @display("p=510,348");
+        }
+
+        Mobile1: MobileRangingHost {
+            @display("p=873,235");
         }
 }
