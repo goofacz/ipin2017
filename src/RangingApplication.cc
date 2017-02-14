@@ -42,7 +42,7 @@ RangingApplication::getLocalAddress () const
 
 void
 RangingApplication::sendMacPacket (const inet::MACAddress& destinationAddress,
-                                   unique_ptr<cPacket> packet)
+                                   unique_ptr<RangingPacket> packet)
 {
     assert (packet);
 

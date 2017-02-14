@@ -5,6 +5,8 @@
 #include <omnetpp.h>
 #include <MACAddress.h>
 
+#include "RangingPacket_m.h"
+
 namespace ipin2017
 {
 
@@ -17,7 +19,7 @@ class RangingApplication :
         const inet::MACAddress& getLocalAddress () const;
 
         void sendMacPacket (const inet::MACAddress& destinationAddress,
-                            std::unique_ptr<omnetpp::cPacket> packet);
+                            std::unique_ptr<RangingPacket> packet);
 
     private:
         int numInitStages() const override;
