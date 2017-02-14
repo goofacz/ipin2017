@@ -7,6 +7,7 @@
 
 using namespace omnetpp;
 using namespace inet;
+using namespace std;
 
 namespace ipin2017
 {
@@ -24,11 +25,10 @@ RangingApplication::initialize (int stage)
         assert (ranging_host);
         const auto nic = ranging_host->getSubmodule ("nic");
         assert (nic);
-        const auto mac = nic->getSubmodule ("mac");
+        const auto mac =  nic->getSubmodule ("mac");
         assert (mac);
-        const auto address = mac->par("address");
 
-        assert (address);
+        const auto address = mac->par("address");
         assert (address.getType () == cPar::STRING);
         localAddress.setAddress (address.stringValue ());
     }
@@ -38,6 +38,21 @@ const MACAddress&
 RangingApplication::getLocalAddress () const
 {
     return localAddress;
+}
+
+void
+RangingApplication::sendMacPacket (const inet::MACAddress& destinationAddress,
+                                   unique_ptr<cPacket> packet)
+{
+    assert (packet);
+
+    auto controlInformation = unique_ptr<Ieee802Ctrl> {new Ieee802Ctrl};
+    controlInformation->setSourceAddress (getLocalAddress ());
+    controlInformation->setDest (destinationAddress);
+
+    packet->setControlInfo (controlInformation.release ());
+
+    send (packet.release (), "out");
 }
 
 int
