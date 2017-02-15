@@ -12,6 +12,8 @@ class MobileRangingApplication :
 {
   private:
     void initialize(int stage) override;
+
+    void handleMessage (omnetpp::cMessage* message) override;
 };
 
 }; // namespace ipin2017
