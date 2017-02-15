@@ -25,10 +25,10 @@ RangingApplication::initialize (int stage)
         assert (ranging_host);
         const auto nic = ranging_host->getSubmodule ("nic");
         assert (nic);
-        const auto mac =  nic->getSubmodule ("mac");
+        const auto mac = nic->getSubmodule ("mac");
         assert (mac);
 
-        const auto address = mac->par("address");
+        const auto& address = mac->par("address");
         assert (address.getType () == cPar::STRING);
         localAddress.setAddress (address.stringValue ());
     }
