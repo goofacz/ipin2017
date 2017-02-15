@@ -30,11 +30,12 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/RangingApplication.o $O/AnchorRangingApplication.o $O/MobileRangingApplication.o $O/RangingPacket_m.o
+OBJS = $O/RangingApplication.o $O/AnchorRangingApplication.o $O/MobileRangingApplication.o $O/RangingPacket_m.o $O/AnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
-    RangingPacket.msg
+    RangingPacket.msg \
+    AnchorSelfMessage.msg
 
 # SM files
 SMFILES =
@@ -139,6 +140,8 @@ $O/AnchorRangingApplication.o: AnchorRangingApplication.cc \
 	AnchorRangingApplication.h \
 	RangingApplication.h \
 	RangingPacket_m.h
+$O/AnchorSelfMessage_m.o: AnchorSelfMessage_m.cc \
+	AnchorSelfMessage_m.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
