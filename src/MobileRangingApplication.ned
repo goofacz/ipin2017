@@ -17,5 +17,6 @@ package ipin2017;
 
 simple MobileRangingApplication extends RangingApplication
 {
-	
+	parameters:
+	    @class(MobileRangingApplication);
 }
