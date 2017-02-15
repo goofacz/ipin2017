@@ -8,7 +8,9 @@ import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 
 network Network
 {
-    @display("bgb=908,390");
+    parameters:
+	    @display("bgb=908,390");
+
     submodules:
         visualizer: IntegratedCanvasVisualizer {
             @display("p=128,24");
