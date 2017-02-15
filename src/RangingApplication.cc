@@ -42,21 +42,30 @@ RangingApplication::getLocalAddress () const
 
 void
 RangingApplication::sendMacPacket (const inet::MACAddress& destinationAddress,
-                                   unique_ptr<RangingPacket> packet)
+                                   unique_ptr<RangingPacket> packet,
+                                   unsigned int delay,
+                                   SimTimeUnit delay_unit)
 {
     assert (packet);
 
     auto controlInformation = unique_ptr<Ieee802Ctrl> {new Ieee802Ctrl};
     controlInformation->setSourceAddress (getLocalAddress ());
     controlInformation->setDest (destinationAddress);
-
     packet->setControlInfo (controlInformation.release ());
+    sendDelayed (packet.release (), SimTime {delay, delay_unit}, "out");
+}
 
-    send (packet.release (), "out");
+void
+RangingApplication::scheduleSelfMessage (unique_ptr<cMessage> message,
+                                         unsigned int delay,
+                                         SimTimeUnit delay_unit)
+{
+    const auto timestamp = simTime () + SimTime {delay, delay_unit};
+    scheduleAt (timestamp, message.release ());
 }
 
 int
-RangingApplication::numInitStages() const
+RangingApplication::numInitStages () const
 {
     return NUM_INIT_STAGES;
 }
