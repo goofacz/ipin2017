@@ -17,7 +17,15 @@ package ipin2017;
 
 moduleinterface IRangingApplication
 {
+    parameters:
+	    int backhaulInSize;
+	    int backhaulOutSize;
+
     gates:
         input in;
         output out;
+
+        // Anchor-only
+        input backhaulIn[backhaulInSize] @loose;
+        output backhaulOut[backhaulOutSize] @loose;
 }

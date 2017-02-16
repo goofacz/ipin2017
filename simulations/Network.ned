@@ -28,25 +28,34 @@ network Network
         Anchor1: MasterAnchorRangingHost {
             @display("p=291,136");
             nic.mac.address = "DE-AD-BE-EF-10-01";
+            backhaulInSize = 3;
         }
         
         Anchor2: HelperAnchorRangingHost {
             @display("p=510,136");
             nic.mac.address = "DE-AD-BE-EF-10-02";
+            backhaulOutSize = 1;
         }
 
         Anchor3: HelperAnchorRangingHost {
             @display("p=291,348");
             nic.mac.address = "DE-AD-BE-EF-10-03";
+            backhaulOutSize = 1;
         }
 
         Anchor4: HelperAnchorRangingHost {
             @display("p=510,348");
             nic.mac.address = "DE-AD-BE-EF-10-04";
+            backhaulOutSize = 1;
         }
 
         Mobile1: MobileRangingHost {
             @display("p=673,300");
             nic.mac.address = "DE-AD-BE-EF-00-01";
         }
+
+    connections:
+        Anchor2.backhaulOut++ --> Anchor1.backhaulIn++;
+        Anchor3.backhaulOut++ --> Anchor1.backhaulIn++;
+        Anchor4.backhaulOut++ --> Anchor1.backhaulIn++;
 }

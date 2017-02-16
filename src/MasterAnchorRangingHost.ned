@@ -19,7 +19,20 @@ module MasterAnchorRangingHost extends RangingHost
 {
     parameters:
         @display("i=device/accesspoint");
+
+        int backhaulInSize = default(0);
+
         mobilityType = "StationaryMobility";
         applicationType = "MasterAnchorRangingApplication";
         nic.mac.promiscuous = false;
+
+        application.backhaulInSize = backhaulInSize;
+
+    gates:
+        input backhaulIn[backhaulInSize] @loose;
+
+    connections:
+        for i=0..sizeof(backhaulIn)-1 {
+            backhaulIn[i] --> application.backhaulIn[i];
+        }
 }
