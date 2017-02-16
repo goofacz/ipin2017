@@ -3,13 +3,13 @@
 #include <omnetpp.h>
 
 #include "RangingApplication.h"
-#include "AnchorSelfMessage_m.h"
-#include "RangingPacket_m.h".h"
+#include "MasterAnchorSelfMessage_m.h"
+#include "RangingPacket_m.h"
 
 namespace ipin2017
 {
 
-class AnchorRangingApplication :
+class MasterAnchorRangingApplication :
     public RangingApplication
 {
   private:
@@ -17,7 +17,7 @@ class AnchorRangingApplication :
 
     void handleMessage (omnetpp::cMessage* message) override;
 
-    void handleSelfMessage (AnchorSelfMessage* message);
+    void handleSelfMessage (MasterAnchorSelfMessage* message);
 
     void handleRangingPacket (RangingPacket* packet);
 

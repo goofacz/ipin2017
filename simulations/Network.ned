@@ -1,6 +1,7 @@
 package ipin2017.simulations;
 
-import ipin2017.AnchorRangingHost;
+import ipin2017.MasterAnchorRangingHost;
+import ipin2017.HelperAnchorRangingHost;
 import ipin2017.MobileRangingHost;
 import inet.networklayer.configurator.generic.GenericNetworkConfigurator;
 import inet.physicallayer.idealradio.IdealRadioMedium;
@@ -24,22 +25,22 @@ network Network
             @display("p=44,26");
         }
         
-        Anchor1: AnchorRangingHost {
+        Anchor1: MasterAnchorRangingHost {
             @display("p=291,136");
             nic.mac.address = "DE-AD-BE-EF-10-01";
         }
         
-        Anchor2: AnchorRangingHost {
+        Anchor2: HelperAnchorRangingHost {
             @display("p=510,136");
             nic.mac.address = "DE-AD-BE-EF-10-02";
         }
 
-        Anchor3: AnchorRangingHost {
+        Anchor3: HelperAnchorRangingHost {
             @display("p=291,348");
             nic.mac.address = "DE-AD-BE-EF-10-03";
         }
 
-        Anchor4: AnchorRangingHost {
+        Anchor4: HelperAnchorRangingHost {
             @display("p=510,348");
             nic.mac.address = "DE-AD-BE-EF-10-04";
         }

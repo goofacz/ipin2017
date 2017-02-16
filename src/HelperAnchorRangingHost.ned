@@ -15,11 +15,11 @@
 
 package ipin2017;
 
-module AnchorRangingHost extends RangingHost
+module HelperAnchorRangingHost extends RangingHost
 {
     parameters:
         @display("i=device/accesspoint");
         mobilityType = "StationaryMobility";
-        applicationType = "AnchorRangingApplication";
+        applicationType = "HelperAnchorRangingApplication";
         nic.mac.promiscuous = true;
 }

@@ -30,12 +30,18 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/RangingApplication.o $O/AnchorRangingApplication.o $O/MobileRangingApplication.o $O/RangingPacket_m.o $O/AnchorSelfMessage_m.o
+OBJS = \
+    $O/HelperAnchorRangingApplication.o \
+    $O/RangingApplication.o \
+    $O/MasterAnchorRangingApplication.o \
+    $O/MobileRangingApplication.o \
+    $O/RangingPacket_m.o \
+    $O/MasterAnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
     RangingPacket.msg \
-    AnchorSelfMessage.msg
+    MasterAnchorSelfMessage.msg
 
 # SM files
 SMFILES =
@@ -131,18 +137,27 @@ depend:
 	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES) $(SM_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
-$O/AnchorRangingApplication.o: AnchorRangingApplication.cc \
+$O/HelperAnchorRangingApplication.o: HelperAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
-	AnchorRangingApplication.h \
-	AnchorSelfMessage_m.h \
+	HelperAnchorRangingApplication.h \
 	RangingApplication.h \
 	RangingPacket_m.h
-$O/AnchorSelfMessage_m.o: AnchorSelfMessage_m.cc \
-	AnchorSelfMessage_m.h
+$O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	MasterAnchorRangingApplication.h \
+	MasterAnchorSelfMessage_m.h \
+	RangingApplication.h \
+	RangingPacket_m.h
+$O/MasterAnchorSelfMessage_m.o: MasterAnchorSelfMessage_m.cc \
+	MasterAnchorSelfMessage_m.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \

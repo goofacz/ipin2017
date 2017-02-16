@@ -2,9 +2,9 @@
 #include <memory>
 
 #include <INETDefs.h>
+#include <MasterAnchorRangingApplication.h>
 #include <MACAddress.h>
 
-#include "AnchorRangingApplication.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -13,38 +13,31 @@ using namespace std;
 namespace ipin2017
 {
 
-Define_Module(AnchorRangingApplication);
+Define_Module(MasterAnchorRangingApplication);
 
 void
-AnchorRangingApplication::initialize(int stage)
+MasterAnchorRangingApplication::initialize(int stage)
 {
     RangingApplication::initialize(stage);
 
     if (stage == INITSTAGE_APPLICATION_LAYER)
     {
-        const auto& broadcastBeaconParamater = par ("broadcastBeacon");
-        assert (broadcastBeaconParamater.getType () == cPar::BOOL);
-        const auto broadcastBeacon = broadcastBeaconParamater.boolValue ();
-
         const auto& broadcastBeaconDelayParamater = par ("broadcastBeaconDelay");
         assert (broadcastBeaconDelayParamater.getType () == cPar::LONG);
         broadcastBeaconDelay = broadcastBeaconDelayParamater.longValue ();
 
-        if (broadcastBeacon)
-        {
-            unique_ptr<AnchorSelfMessage> message {new AnchorSelfMessage {}};
-            message->setEventType (BROADCAST_BEACON);
-            scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
-        }
+        unique_ptr<MasterAnchorSelfMessage> message {new MasterAnchorSelfMessage {}};
+        message->setEventType (BROADCAST_BEACON);
+        scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
     }
 }
 
 void
-AnchorRangingApplication::handleMessage (cMessage* message)
+MasterAnchorRangingApplication::handleMessage (cMessage* message)
 {
     if (message->isSelfMessage ())
     {
-        handleSelfMessage (check_and_cast<AnchorSelfMessage*> (message));
+        handleSelfMessage (check_and_cast<MasterAnchorSelfMessage*> (message));
     }
     else
     {
@@ -53,7 +46,7 @@ AnchorRangingApplication::handleMessage (cMessage* message)
 }
 
 void
-AnchorRangingApplication::handleSelfMessage (AnchorSelfMessage* message)
+MasterAnchorRangingApplication::handleSelfMessage (MasterAnchorSelfMessage* message)
 {
     switch (message->getEventType ())
     {
@@ -64,7 +57,7 @@ AnchorRangingApplication::handleSelfMessage (AnchorSelfMessage* message)
 }
 
 void
-AnchorRangingApplication::handleRangingPacket (RangingPacket* packet)
+MasterAnchorRangingApplication::handleRangingPacket (RangingPacket* packet)
 {
     if (packet->getSequenceNumber () != getCurrentPacketSequenceNumber () + 1)
     {
@@ -75,25 +68,25 @@ AnchorRangingApplication::handleRangingPacket (RangingPacket* packet)
 }
 
 int
-AnchorRangingApplication::getBroadcastBeaconDelay () const
+MasterAnchorRangingApplication::getBroadcastBeaconDelay () const
 {
     return broadcastBeaconDelay;
 }
 
 unsigned int
-AnchorRangingApplication::getCurrentPacketSequenceNumber () const
+MasterAnchorRangingApplication::getCurrentPacketSequenceNumber () const
 {
     return packetSequenceNumberGenerator;
 }
 
 unsigned int
-AnchorRangingApplication::getNextPacketSequenceNumber ()
+MasterAnchorRangingApplication::getNextPacketSequenceNumber ()
 {
     return ++packetSequenceNumberGenerator;
 }
 
 void
-AnchorRangingApplication::handleBroadcastBeaconEvent ()
+MasterAnchorRangingApplication::handleBroadcastBeaconEvent ()
 {
     // Prepare & send beacon
     unique_ptr<RangingPacket> packet {new RangingPacket {}};
@@ -104,7 +97,7 @@ AnchorRangingApplication::handleBroadcastBeaconEvent ()
     sendMacPacket (MACAddress::BROADCAST_ADDRESS, move (packet));
 
     // Schedule next beacon
-    unique_ptr<AnchorSelfMessage> message {new AnchorSelfMessage {}};
+    unique_ptr<MasterAnchorSelfMessage> message {new MasterAnchorSelfMessage {}};
     message->setEventType (BROADCAST_BEACON);
 
     scheduleSelfMessage (move (message), getBroadcastBeaconDelay (), SIMTIME_MS);
