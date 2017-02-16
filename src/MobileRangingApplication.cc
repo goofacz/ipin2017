@@ -2,7 +2,6 @@
 #include <Ieee802Ctrl.h>
 
 #include "MobileRangingApplication.h"
-#include "RangingPacket_m.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -33,12 +32,21 @@ MobileRangingApplication::handleMessage (cMessage* message)
     }
     else
     {
-        auto packet = check_and_cast<RangingPacket*> (message);
-        auto packetControlInformation = check_and_cast<Ieee802Ctrl*> (packet->getControlInfo ());
-        unique_ptr<RangingPacket> reply {new RangingPacket};
-        reply->setBitLength (4);
-        sendMacPacket (packetControlInformation->getSourceAddress (), move (reply));
+        handleRangingPacket (check_and_cast<RangingPacket*> (message));
     }
+}
+
+void
+MobileRangingApplication::handleRangingPacket (RangingPacket* packet)
+{
+    // Prepare & send reply
+    auto packetControlInformation = check_and_cast<Ieee802Ctrl*> (packet->getControlInfo ());
+    unique_ptr<RangingPacket> reply {new RangingPacket};
+
+    reply->setBitLength (4);
+    reply->setSequenceNumber (packet->getSequenceNumber () + 1);
+
+    sendMacPacket (packetControlInformation->getSourceAddress (), move (reply));
 }
 
 }; // namespace ipin2017
