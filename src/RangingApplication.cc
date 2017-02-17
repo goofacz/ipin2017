@@ -2,6 +2,7 @@
 
 #include <inet/common/INETDefs.h>
 #include <Ieee802Ctrl.h>
+#include <IRadio.h>
 
 #include "RangingApplication.h"
 
@@ -31,6 +32,18 @@ RangingApplication::initialize (int stage)
         const auto& address = mac->par("address");
         assert (address.getType () == cPar::STRING);
         localAddress.setAddress (address.stringValue ());
+
+        auto transmissionStateChangedFunction = [this] (cComponent* source, simsignal_t signalID, long value, cObject* details)  {
+            this->transmissionStateChangedCallback (source, signalID, value, details);
+        };
+        transmissionStateChangedListener = transmissionStateChangedFunction;
+        nic->subscribe("transmissionStateChanged", &transmissionStateChangedListener);
+
+        auto receptionStateChangedListenerFunction = [this] (cComponent* source, simsignal_t signalID, long value, cObject* details)  {
+            this->receptionStateChangedCallback (source, signalID, value, details);
+        };
+        receptionStateChangedListener = receptionStateChangedListenerFunction;
+        nic->subscribe("receptionStateChangedListener", &receptionStateChangedListener);
     }
 }
 
@@ -64,10 +77,71 @@ RangingApplication::scheduleSelfMessage (unique_ptr<cMessage> message,
     scheduleAt (timestamp, message.release ());
 }
 
+const RangingApplication::RecentTransmitterTimestamps&
+RangingApplication::getRecentTransmitterTimestamps () const
+{
+    return recentTransmitterTimestamps;
+}
+
+const RangingApplication::RecentReceiverTimestamps&
+RangingApplication::getRRecentReceiverTimestamps () const
+{
+    return recentReceiverTimestamps;
+}
+
 int
 RangingApplication::numInitStages () const
 {
     return NUM_INIT_STAGES;
+}
+
+void
+RangingApplication::transmissionStateChangedCallback (cComponent* source,
+                                                      simsignal_t signalID,
+                                                      long value,
+                                                      cObject* details)
+{
+    const auto state = static_cast<physicallayer::IRadio::TransmissionState> (value);
+    switch (state)
+    {
+        case physicallayer::IRadio::TRANSMISSION_STATE_UNDEFINED:
+            recentTransmitterTimestamps.undefined = simTime ();
+            break;
+        case physicallayer::IRadio::TRANSMISSION_STATE_IDLE:
+            recentTransmitterTimestamps.idle = simTime ();
+            break;
+        case physicallayer::IRadio::TRANSMISSION_STATE_TRANSMITTING:
+            recentTransmitterTimestamps.transmitting = simTime ();
+            break;
+        default:
+            throw runtime_error ("Unknown nic.transmissionStateChanged state!");
+    }
+}
+
+void
+RangingApplication::receptionStateChangedCallback (cComponent* source,
+                                                   simsignal_t signalID,
+                                                   long value,
+                                                   cObject* details)
+{
+    const auto state = static_cast<physicallayer::IRadio::ReceptionState> (value);
+    switch (state)
+    {
+        case physicallayer::IRadio::RECEPTION_STATE_UNDEFINED:
+            recentReceiverTimestamps.undefined = simTime ();
+            break;
+        case physicallayer::IRadio::RECEPTION_STATE_IDLE:
+            recentReceiverTimestamps.idle = simTime ();
+            break;
+        case physicallayer::IRadio::RECEPTION_STATE_BUSY:
+            recentReceiverTimestamps.busy = simTime ();
+            break;
+        case physicallayer::IRadio::RECEPTION_STATE_RECEIVING:
+            recentReceiverTimestamps.receiving = simTime ();
+            break;
+        default:
+            throw runtime_error ("Unknown nic.receptionStateChangedCallback state!");
+    }
 }
 
 } //namespace ipin2017
