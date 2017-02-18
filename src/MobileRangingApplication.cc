@@ -34,6 +34,8 @@ MobileRangingApplication::handleMessage (cMessage* message)
     {
         handleRangingPacket (check_and_cast<RangingPacket*> (message));
     }
+
+    delete message;
 }
 
 void

@@ -30,6 +30,7 @@ void
 HelperAnchorRangingApplication::handleMessage (cMessage* message)
 {
     // TODO
+    delete message;
 }
 
 }; // namespace ipin2017
