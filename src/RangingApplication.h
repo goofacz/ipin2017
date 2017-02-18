@@ -5,6 +5,7 @@
 #include <omnetpp.h>
 #include <MACAddress.h>
 #include <Coord.h>
+#include <IRadio.h>
 
 #include "RangingPacket_m.h"
 #include "Listener.h"
@@ -32,6 +33,10 @@ class RangingApplication :
         };
 
     protected:
+        virtual void transmissionStateChanged (inet::physicallayer::IRadio::TransmissionState state);
+
+        virtual void receptionStateChanged (inet::physicallayer::IRadio::ReceptionState state);
+
         void initialize (int stage) override;
 
         const inet::MACAddress& getLocalAddress () const;

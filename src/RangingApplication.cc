@@ -8,12 +8,26 @@
 
 using namespace omnetpp;
 using namespace inet;
+using namespace inet::physicallayer;
 using namespace std;
 
 namespace ipin2017
 {
 
 Define_Module(RangingApplication);
+
+
+void
+RangingApplication::transmissionStateChanged (IRadio::TransmissionState state)
+{
+    // ...
+}
+
+void
+RangingApplication::receptionStateChanged (IRadio::ReceptionState state)
+{
+    // ...
+}
 
 void
 RangingApplication::initialize (int stage)
@@ -117,21 +131,23 @@ RangingApplication::transmissionStateChangedCallback (cComponent* source,
                                                       long value,
                                                       cObject* details)
 {
-    const auto state = static_cast<physicallayer::IRadio::TransmissionState> (value);
+    const auto state = static_cast<IRadio::TransmissionState> (value);
     switch (state)
     {
-        case physicallayer::IRadio::TRANSMISSION_STATE_UNDEFINED:
+        case IRadio::TRANSMISSION_STATE_UNDEFINED:
             recentTransmitterTimestamps.undefined = simTime ();
             break;
-        case physicallayer::IRadio::TRANSMISSION_STATE_IDLE:
+        case IRadio::TRANSMISSION_STATE_IDLE:
             recentTransmitterTimestamps.idle = simTime ();
             break;
-        case physicallayer::IRadio::TRANSMISSION_STATE_TRANSMITTING:
+        case IRadio::TRANSMISSION_STATE_TRANSMITTING:
             recentTransmitterTimestamps.transmitting = simTime ();
             break;
         default:
             throw runtime_error ("Unknown nic.transmissionStateChanged state!");
     }
+
+    transmissionStateChanged (state);
 }
 
 void
@@ -140,24 +156,26 @@ RangingApplication::receptionStateChangedCallback (cComponent* source,
                                                    long value,
                                                    cObject* details)
 {
-    const auto state = static_cast<physicallayer::IRadio::ReceptionState> (value);
+    const auto state = static_cast<IRadio::ReceptionState> (value);
     switch (state)
     {
-        case physicallayer::IRadio::RECEPTION_STATE_UNDEFINED:
+        case IRadio::RECEPTION_STATE_UNDEFINED:
             recentReceiverTimestamps.undefined = simTime ();
             break;
-        case physicallayer::IRadio::RECEPTION_STATE_IDLE:
+        case IRadio::RECEPTION_STATE_IDLE:
             recentReceiverTimestamps.idle = simTime ();
             break;
-        case physicallayer::IRadio::RECEPTION_STATE_BUSY:
+        case IRadio::RECEPTION_STATE_BUSY:
             recentReceiverTimestamps.busy = simTime ();
             break;
-        case physicallayer::IRadio::RECEPTION_STATE_RECEIVING:
+        case IRadio::RECEPTION_STATE_RECEIVING:
             recentReceiverTimestamps.receiving = simTime ();
             break;
         default:
             throw runtime_error ("Unknown nic.receptionStateChangedCallback state!");
     }
+
+    receptionStateChanged (state);
 }
 
 void
