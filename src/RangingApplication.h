@@ -4,6 +4,7 @@
 
 #include <omnetpp.h>
 #include <MACAddress.h>
+#include <Coord.h>
 
 #include "RangingPacket_m.h"
 #include "Listener.h"
@@ -48,22 +49,32 @@ class RangingApplication :
 
         const RecentReceiverTimestamps& getRRecentReceiverTimestamps () const;
 
+        const inet::Coord& getCurrentPosition () const;
+
     private:
         int numInitStages () const override;
 
-        void transmissionStateChangedCallback (cComponent* source,
-                                               simsignal_t signalID,
+        void transmissionStateChangedCallback (omnetpp::cComponent* source,
+                                               omnetpp::simsignal_t signalID,
                                                long value,
-                                               cObject* details);
+                                               omnetpp::cObject* details);
 
-        void receptionStateChangedCallback (cComponent* source,
+        void receptionStateChangedCallback (omnetpp::cComponent* source,
                                             simsignal_t signalID,
                                             long value,
-                                            cObject* details);
+                                            omnetpp::cObject* details);
+
+        void mobilityStateChangedCallback (omnetpp::cComponent* source,
+                                           simsignal_t signalID,
+                                           omnetpp::cObject* value,
+                                           omnetpp::cObject* details);
 
         inet::MACAddress localAddress;
+        inet::Coord currentPosition;
+
         Listener<long> transmissionStateChangedListener;
         Listener<long> receptionStateChangedListener;
+        Listener<omnetpp::cObject*> mobilityStateChangedListener;
         RecentTransmitterTimestamps recentTransmitterTimestamps;
         RecentReceiverTimestamps recentReceiverTimestamps;
 };

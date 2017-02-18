@@ -45,6 +45,15 @@ RangingApplication::initialize (int stage)
         };
         receptionStateChangedListener = receptionStateChangedListenerFunction;
         radio->subscribe("receptionStateChanged", &receptionStateChangedListener);
+
+        const auto mobility = ranging_host->getModuleByPath(".mobility");
+        assert (mobility);
+
+        auto mobilityStateChangedListenerFunction = [this] (cComponent* source, simsignal_t signalID, cObject* value, cObject* details)  {
+            this->mobilityStateChangedCallback (source, signalID, value, details);
+        };
+        mobilityStateChangedListener = mobilityStateChangedListenerFunction;
+        mobility->subscribe("mobilityStateChanged", &mobilityStateChangedListener);
     }
 }
 
@@ -88,6 +97,12 @@ const RangingApplication::RecentReceiverTimestamps&
 RangingApplication::getRRecentReceiverTimestamps () const
 {
     return recentReceiverTimestamps;
+}
+
+const Coord&
+RangingApplication::getCurrentPosition () const
+{
+    return currentPosition;
 }
 
 int
@@ -143,6 +158,16 @@ RangingApplication::receptionStateChangedCallback (cComponent* source,
         default:
             throw runtime_error ("Unknown nic.receptionStateChangedCallback state!");
     }
+}
+
+void
+RangingApplication::mobilityStateChangedCallback (cComponent* source,
+                                                  simsignal_t signalID,
+                                                  cObject* value,
+                                                  cObject* details)
+{
+    IMobility* mobility {check_and_cast<IMobility*> (value)};
+    currentPosition = mobility->getCurrentPosition ();
 }
 
 } //namespace ipin2017
