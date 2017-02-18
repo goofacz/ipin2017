@@ -24,26 +24,27 @@ RangingApplication::initialize (int stage)
     {
         const auto ranging_host = getParentModule ();
         assert (ranging_host);
-        const auto nic = ranging_host->getSubmodule ("nic");
-        assert (nic);
-        const auto mac = nic->getSubmodule ("mac");
+        const auto mac = ranging_host->getModuleByPath (".nic.mac");
         assert (mac);
 
         const auto& address = mac->par("address");
         assert (address.getType () == cPar::STRING);
         localAddress.setAddress (address.stringValue ());
 
+        const auto radio = ranging_host->getModuleByPath(".nic.radio");
+        assert (radio);
+
         auto transmissionStateChangedFunction = [this] (cComponent* source, simsignal_t signalID, long value, cObject* details)  {
             this->transmissionStateChangedCallback (source, signalID, value, details);
         };
         transmissionStateChangedListener = transmissionStateChangedFunction;
-        nic->subscribe("transmissionStateChanged", &transmissionStateChangedListener);
+        radio->subscribe("transmissionStateChanged", &transmissionStateChangedListener);
 
         auto receptionStateChangedListenerFunction = [this] (cComponent* source, simsignal_t signalID, long value, cObject* details)  {
             this->receptionStateChangedCallback (source, signalID, value, details);
         };
         receptionStateChangedListener = receptionStateChangedListenerFunction;
-        nic->subscribe("receptionStateChangedListener", &receptionStateChangedListener);
+        radio->subscribe("receptionStateChanged", &receptionStateChangedListener);
     }
 }
 
