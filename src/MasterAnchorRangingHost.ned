@@ -23,16 +23,21 @@ module MasterAnchorRangingHost extends RangingHost
         int backhaulInSize = default(0);
 
         mobilityType = "StationaryMobility";
-        applicationType = "MasterAnchorRangingApplication";
         nic.mac.promiscuous = false;
 
-        application.backhaulInSize = backhaulInSize;
-
     gates:
-        input backhaulIn[backhaulInSize] @loose;
+        input backhaulIn[backhaulInSize];
+
+	submodules:
+        application: MasterAnchorRangingApplication	{
+            backhaulInSize = backhaulInSize;
+        }
 
     connections:
         for i=0..sizeof(backhaulIn)-1 {
             backhaulIn[i] --> application.backhaulIn[i];
         }
+
+        nic.upperLayerIn <-- application.out;
+        nic.upperLayerOut --> application.in;
 }

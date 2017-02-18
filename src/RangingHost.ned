@@ -24,7 +24,6 @@ module RangingHost extends MobileHost
 {
     parameters:
         @networkNode();
-        string applicationType;
         *.interfaceTableModule = default(absPath(".interfaceTable"));
 
     gates:
@@ -32,16 +31,11 @@ module RangingHost extends MobileHost
 
     submodules:
         interfaceTable: InterfaceTable;
-        
+
         routingTable: GenericRoutingTable;
-        
-        application: <applicationType> like IRangingApplication;
-        
+
         nic: IdealWirelessNic;
-        
+
     connections:
         radioIn --> nic.radioIn;
-        
-        nic.upperLayerIn <-- application.out;
-        nic.upperLayerOut --> application.in;
 }

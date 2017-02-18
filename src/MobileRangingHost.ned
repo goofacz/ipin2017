@@ -20,5 +20,11 @@ module MobileRangingHost extends RangingHost
     parameters:
         @display("i=device/pocketpc");
         mobilityType = "LinearMobility";
-        applicationType = "MobileRangingApplication";
+
+    submodules:
+        application: MobileRangingApplication;
+
+    connections:
+        nic.upperLayerIn <-- application.out;
+        nic.upperLayerOut --> application.in;
 }
