@@ -1,7 +1,11 @@
+#include <cassert>
+
 #include <INETDefs.h>
 #include <Ieee802Ctrl.h>
 
 #include "MobileRangingApplication.h"
+#include "RangingHost.h"
+#include "Utilities.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -19,19 +23,19 @@ MobileRangingApplication::initialize(int stage)
 
     if (stage == INITSTAGE_APPLICATION_LAYER)
     {
-        // TODO
+        const auto& broadcastReplyDelayParamater = par ("broadcastReplyDelay");
+        assert (broadcastReplyDelayParamater.getType () == cPar::LONG);
+        broadcastReplyDelay = SimTime {broadcastReplyDelayParamater.longValue (), SIMTIME_US};
     }
 }
 
 void
 MobileRangingApplication::handleMessage (cMessage* message)
 {
-    if (message->isSelfMessage ())
-    {
+    if (message->isSelfMessage ())    {
         // TODO
     }
-    else
-    {
+    else    {
         handleRangingPacket (check_and_cast<RangingPacket*> (message));
     }
 
@@ -48,7 +52,12 @@ MobileRangingApplication::handleRangingPacket (RangingPacket* packet)
     reply->setBitLength (4);
     reply->setSequenceNumber (packet->getSequenceNumber () + 1);
 
-    sendMacPacket (packetControlInformation->getSourceAddress (), move (reply));
+    // Compute delay
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+    SimTime delay {broadcastReplyDelay - (simTime () - rangingHost->getRxBeginTimestamp ())};
+    EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
+
+    sendMacPacket (packetControlInformation->getSourceAddress (), move (reply), delay);
 }
 
 }; // namespace ipin2017

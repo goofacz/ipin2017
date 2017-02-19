@@ -17,6 +17,8 @@ class MobileRangingApplication :
     void handleMessage (omnetpp::cMessage* message) override;
 
     void handleRangingPacket (RangingPacket* packet);
+
+    omnetpp::SimTime broadcastReplyDelay {0};
 };
 
 }; // namespace ipin2017

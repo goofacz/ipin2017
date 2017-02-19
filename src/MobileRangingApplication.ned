@@ -19,4 +19,5 @@ simple MobileRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(MobileRangingApplication);
+	    int broadcastReplyDelay @unit(us) = default(1000us);
 }
