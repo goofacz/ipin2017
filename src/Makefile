@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for ipin2017
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/physicallayer/contract/packetlevel -I../../inet/src/inet/common -I../../inet/src/inet/common/geometry/common -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
+#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/physicallayer/contract/packetlevel -I../../inet/src/inet/common -I../../inet/src/inet/common/geometry/common -I../../inet/src/inet/physicallayer/common/packetlevel -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
 #
 
 # Name of target to be created (-o option)
@@ -21,6 +21,7 @@ INCLUDE_PATH = \
     -I../../inet/src/inet/physicallayer/contract/packetlevel \
     -I../../inet/src/inet/common \
     -I../../inet/src/inet/common/geometry/common \
+    -I../../inet/src/inet/physicallayer/common/packetlevel \
     -I.
 
 # Additional object and library files to link with
@@ -40,6 +41,7 @@ OBJS = \
     $O/HelperAnchorRangingApplication.o \
     $O/RangingApplication.o \
     $O/MasterAnchorRangingApplication.o \
+    $O/RangingHost.o \
     $O/MobileRangingApplication.o \
     $O/RangingPacket_m.o \
     $O/MasterAnchorSelfMessage_m.o
@@ -146,82 +148,18 @@ depend:
 $O/HelperAnchorRangingApplication.o: HelperAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
-	$(INET_PROJ)/src/inet/common/INETMath.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
-	$(INET_PROJ)/src/inet/common/Units.h \
-	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
-	$(INET_PROJ)/src/inet/common/geometry/common/EulerAngles.h \
-	$(INET_PROJ)/src/inet/common/mapping/Interpolation.h \
-	$(INET_PROJ)/src/inet/common/mapping/MappingBase.h \
-	$(INET_PROJ)/src/inet/common/mapping/MappingUtils.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
-	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
-	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IAntenna.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IArrival.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IInterference.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListening.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListeningDecision.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IModulation.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/INoise.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayer.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayerFrame.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPrintableObject.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadio.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioFrame.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioSignal.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceiver.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReception.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionDecision.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionResult.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ISNIR.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
 	HelperAnchorRangingApplication.h \
-	Listener.h \
 	RangingApplication.h \
 	RangingPacket_m.h
 $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
-	$(INET_PROJ)/src/inet/common/INETMath.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
-	$(INET_PROJ)/src/inet/common/Units.h \
-	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
-	$(INET_PROJ)/src/inet/common/geometry/common/EulerAngles.h \
-	$(INET_PROJ)/src/inet/common/mapping/Interpolation.h \
-	$(INET_PROJ)/src/inet/common/mapping/MappingBase.h \
-	$(INET_PROJ)/src/inet/common/mapping/MappingUtils.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
-	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
-	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IAntenna.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IArrival.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IInterference.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListening.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListeningDecision.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IModulation.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/INoise.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayer.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayerFrame.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPrintableObject.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadio.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioFrame.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioSignal.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceiver.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReception.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionDecision.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionResult.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ISNIR.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
-	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
-	Listener.h \
 	MasterAnchorRangingApplication.h \
 	MasterAnchorSelfMessage_m.h \
 	RangingApplication.h \
@@ -271,7 +209,9 @@ $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	Listener.h \
 	MobileRangingApplication.h \
 	RangingApplication.h \
-	RangingPacket_m.h
+	RangingHost.h \
+	RangingPacket_m.h \
+	Utilities.h
 $O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
@@ -314,7 +254,76 @@ $O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
 	Listener.h \
 	RangingApplication.h \
+	RangingHost.h \
 	RangingPacket_m.h
+$O/RangingHost.o: RangingHost.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
+	$(INET_PROJ)/src/inet/common/IVisitor.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/IntervalTree.h \
+	$(INET_PROJ)/src/inet/common/Units.h \
+	$(INET_PROJ)/src/inet/common/geometry/base/GeometricObjectBase.h \
+	$(INET_PROJ)/src/inet/common/geometry/base/ShapeBase.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/EulerAngles.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Rotation.h \
+	$(INET_PROJ)/src/inet/common/geometry/object/LineSegment.h \
+	$(INET_PROJ)/src/inet/common/lifecycle/ILifecycle.h \
+	$(INET_PROJ)/src/inet/common/lifecycle/LifecycleOperation.h \
+	$(INET_PROJ)/src/inet/common/lifecycle/NodeOperations.h \
+	$(INET_PROJ)/src/inet/common/lifecycle/OperationalBase.h \
+	$(INET_PROJ)/src/inet/common/mapping/Interpolation.h \
+	$(INET_PROJ)/src/inet/common/mapping/MappingBase.h \
+	$(INET_PROJ)/src/inet/common/mapping/MappingUtils.h \
+	$(INET_PROJ)/src/inet/environment/common/Material.h \
+	$(INET_PROJ)/src/inet/environment/contract/IGround.h \
+	$(INET_PROJ)/src/inet/environment/contract/IMaterial.h \
+	$(INET_PROJ)/src/inet/environment/contract/IMaterialRegistry.h \
+	$(INET_PROJ)/src/inet/environment/contract/IObjectCache.h \
+	$(INET_PROJ)/src/inet/environment/contract/IPhysicalEnvironment.h \
+	$(INET_PROJ)/src/inet/environment/contract/IPhysicalObject.h \
+	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
+	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerBase.h \
+	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
+	$(INET_PROJ)/src/inet/physicallayer/common/packetlevel/Radio.h \
+	$(INET_PROJ)/src/inet/physicallayer/common/packetlevel/RadioFrame.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IAnalogModel.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IAntenna.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IArrival.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IBackgroundNoise.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ICommunicationCache.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IInterference.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListening.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListeningDecision.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IMediumLimitCache.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IModulation.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/INeighborCache.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/INoise.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IObstacleLoss.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPathLoss.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayer.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayerFrame.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPrintableObject.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPropagation.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadio.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioFrame.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioMedium.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioSignal.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceiver.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReception.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionDecision.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionResult.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ISNIR.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
+	Listener.h \
+	RangingHost.h
 $O/RangingPacket_m.o: RangingPacket_m.cc \
 	RangingPacket_m.h
 

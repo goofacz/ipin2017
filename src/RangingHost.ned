@@ -23,6 +23,7 @@ import inet.networklayer.generic.GenericRoutingTable;
 module RangingHost extends MobileHost
 {
     parameters:
+        @class(RangingHost);
         @networkNode();
         *.interfaceTableModule = default(absPath(".interfaceTable"));
 
