@@ -43,12 +43,16 @@ OBJS = \
     $O/MasterAnchorRangingApplication.o \
     $O/RangingHost.o \
     $O/MobileRangingApplication.o \
-    $O/RangingPacket_m.o \
+    $O/RangingReplyFrame_m.o \
+    $O/BeaconFrame_m.o \
+    $O/Frame_m.o \
     $O/MasterAnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
-    RangingPacket.msg \
+    RangingReplyFrame.msg \
+    BeaconFrame.msg \
+    Frame.msg \
     MasterAnchorSelfMessage.msg
 
 # SM files
@@ -145,25 +149,34 @@ depend:
 	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES) $(SM_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+$O/BeaconFrame_m.o: BeaconFrame_m.cc \
+	BeaconFrame_m.h \
+	Frame_m.h
+$O/Frame_m.o: Frame_m.cc \
+	Frame_m.h
 $O/HelperAnchorRangingApplication.o: HelperAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	BeaconFrame_m.h \
+	Frame_m.h \
 	HelperAnchorRangingApplication.h \
 	RangingApplication.h \
-	RangingPacket_m.h
+	RangingReplyFrame_m.h
 $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	BeaconFrame_m.h \
+	Frame_m.h \
 	MasterAnchorRangingApplication.h \
 	MasterAnchorSelfMessage_m.h \
 	RangingApplication.h \
-	RangingPacket_m.h
+	RangingReplyFrame_m.h
 $O/MasterAnchorSelfMessage_m.o: MasterAnchorSelfMessage_m.cc \
 	MasterAnchorSelfMessage_m.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
@@ -206,11 +219,13 @@ $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
+	BeaconFrame_m.h \
+	Frame_m.h \
 	Listener.h \
 	MobileRangingApplication.h \
 	RangingApplication.h \
 	RangingHost.h \
-	RangingPacket_m.h \
+	RangingReplyFrame_m.h \
 	Utilities.h
 $O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
@@ -252,10 +267,10 @@ $O/RangingApplication.o: RangingApplication.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
+	Frame_m.h \
 	Listener.h \
 	RangingApplication.h \
-	RangingHost.h \
-	RangingPacket_m.h
+	RangingHost.h
 $O/RangingHost.o: RangingHost.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
@@ -324,6 +339,7 @@ $O/RangingHost.o: RangingHost.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
 	Listener.h \
 	RangingHost.h
-$O/RangingPacket_m.o: RangingPacket_m.cc \
-	RangingPacket_m.h
+$O/RangingReplyFrame_m.o: RangingReplyFrame_m.cc \
+	Frame_m.h \
+	RangingReplyFrame_m.h
 

@@ -5,6 +5,7 @@
 
 #include "RangingApplication.h"
 #include "RangingHost.h"
+#include "Frame_m.h"
 
 using namespace omnetpp;
 using namespace inet;
@@ -28,17 +29,17 @@ RangingApplication::initialize (int stage)
 }
 
 void
-RangingApplication::sendMacPacket (const inet::MACAddress& destinationAddress,
-                                   unique_ptr<RangingPacket> packet,
-                                   const SimTime& delay)
+RangingApplication::sendFrame (const inet::MACAddress& destinationAddress,
+                               unique_ptr<Frame> frame,
+                               const SimTime& delay)
 {
-    assert (packet);
+    assert (frame);
     auto ranginghHst = check_and_cast<RangingHost*> (getParentModule ());
     auto controlInformation = unique_ptr<Ieee802Ctrl> {new Ieee802Ctrl};
     controlInformation->setSourceAddress (ranginghHst->getLocalAddress ());
     controlInformation->setDest (destinationAddress);
-    packet->setControlInfo (controlInformation.release ());
-    sendDelayed (packet.release (), delay, "out");
+    frame->setControlInfo (controlInformation.release ());
+    sendDelayed (frame.release (), delay, "out");
 }
 
 void

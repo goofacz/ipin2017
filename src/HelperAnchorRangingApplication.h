@@ -3,7 +3,8 @@
 #include <omnetpp.h>
 
 #include "RangingApplication.h"
-#include "RangingPacket_m.h"
+#include "RangingReplyFrame_m.h"
+#include "BeaconFrame_m.h"
 
 namespace ipin2017
 {
@@ -16,8 +17,9 @@ class HelperAnchorRangingApplication :
 
     void handleMessage (omnetpp::cMessage* message) override;
 
-    void handleRangingPacket (RangingPacket* packet);
+    void handleFrame (RangingReplyFrame* frame);
 
+    void handleFrame (BeaconFrame* frame);
 };
 
 }; // namespace ipin2017

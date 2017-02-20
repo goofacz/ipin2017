@@ -6,6 +6,7 @@
 #include "MobileRangingApplication.h"
 #include "RangingHost.h"
 #include "Utilities.h"
+#include "RangingReplyFrame_m.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -32,32 +33,42 @@ MobileRangingApplication::initialize(int stage)
 void
 MobileRangingApplication::handleMessage (cMessage* message)
 {
-    if (message->isSelfMessage ())    {
+    if (message->isSelfMessage ())
+    {
         // TODO
     }
-    else    {
-        handleRangingPacket (check_and_cast<RangingPacket*> (message));
+    else
+    {
+        const auto frame = check_and_cast<const Frame*> (message);
+        switch (frame->getType ())
+        {
+            case BEACON_FRAME:
+                handleFrame (check_and_cast<BeaconFrame*> (message));
+                break;
+            default:
+                throw cRuntimeError ("Unsupported frame");
+        }
     }
 
     delete message;
 }
 
 void
-MobileRangingApplication::handleRangingPacket (RangingPacket* packet)
+MobileRangingApplication::handleFrame (BeaconFrame* beaconFrame)
 {
     // Prepare & send reply
-    auto packetControlInformation = check_and_cast<Ieee802Ctrl*> (packet->getControlInfo ());
-    unique_ptr<RangingPacket> reply {new RangingPacket};
+    auto packetControlInformation = check_and_cast<Ieee802Ctrl*> (beaconFrame->getControlInfo ());
+    unique_ptr<RangingReplyFrame> rangingReplyFrame {new RangingReplyFrame};
 
-    reply->setBitLength (4);
-    reply->setSequenceNumber (packet->getSequenceNumber () + 1);
+    rangingReplyFrame->setBitLength (4);
+    rangingReplyFrame->setSequenceNumber (beaconFrame->getSequenceNumber () + 1);
 
     // Compute delay
     const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
     SimTime delay {broadcastReplyDelay - (simTime () - rangingHost->getRxBeginTimestamp ())};
     EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
 
-    sendMacPacket (packetControlInformation->getSourceAddress (), move (reply), delay);
+    sendFrame (packetControlInformation->getSourceAddress (), unique_ptr<Frame> (rangingReplyFrame.release ()), delay);
 }
 
 }; // namespace ipin2017

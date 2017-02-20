@@ -4,7 +4,7 @@
 
 #include "RangingApplication.h"
 #include "MasterAnchorSelfMessage_m.h"
-#include "RangingPacket_m.h"
+#include "RangingReplyFrame_m.h"
 
 namespace ipin2017
 {
@@ -19,7 +19,7 @@ class MasterAnchorRangingApplication :
 
     void handleSelfMessage (MasterAnchorSelfMessage* message);
 
-    void handleRangingPacket (RangingPacket* packet);
+    void handleFrame (RangingReplyFrame* frame);
 
     void handleBroadcastBeaconEvent ();
 

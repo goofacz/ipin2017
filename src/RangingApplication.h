@@ -5,7 +5,7 @@
 #include <omnetpp.h>
 #include <MACAddress.h>
 
-#include "RangingPacket_m.h"
+#include "Frame_m.h"
 
 namespace ipin2017
 {
@@ -16,9 +16,9 @@ class RangingApplication :
     protected:
         void initialize (int stage) override;
 
-        void sendMacPacket (const inet::MACAddress& destinationAddress,
-                            std::unique_ptr<RangingPacket> packet,
-                            const omnetpp::SimTime& delay = omnetpp::SimTime {0, omnetpp::SIMTIME_MS});
+        void sendFrame (const inet::MACAddress& destinationAddress,
+                        std::unique_ptr<Frame> frame,
+                        const omnetpp::SimTime& delay = omnetpp::SimTime {0, omnetpp::SIMTIME_MS});
 
         void scheduleSelfMessage (std::unique_ptr<omnetpp::cMessage> message,
                                   unsigned int delay,

@@ -5,6 +5,7 @@
 #include <MasterAnchorRangingApplication.h>
 #include <MACAddress.h>
 
+#include "BeaconFrame_m.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -41,7 +42,15 @@ MasterAnchorRangingApplication::handleMessage (cMessage* message)
     }
     else
     {
-        handleRangingPacket (check_and_cast<RangingPacket*> (message));
+        const auto frame = check_and_cast<const Frame*> (message);
+        switch (frame->getType ())
+        {
+            case RANGING_REPLY_FRAME:
+                handleFrame (check_and_cast<RangingReplyFrame*> (message));
+                break;
+            default:
+                throw cRuntimeError ("Unsupported frame");
+        }
     }
 
     delete message;
@@ -59,9 +68,9 @@ MasterAnchorRangingApplication::handleSelfMessage (MasterAnchorSelfMessage* mess
 }
 
 void
-MasterAnchorRangingApplication::handleRangingPacket (RangingPacket* packet)
+MasterAnchorRangingApplication::handleFrame (RangingReplyFrame* frame)
 {
-    if (packet->getSequenceNumber () != getCurrentPacketSequenceNumber () + 1)
+    if (frame->getSequenceNumber () != getCurrentPacketSequenceNumber () + 1)
     {
         // TODO
     }
@@ -91,12 +100,12 @@ void
 MasterAnchorRangingApplication::handleBroadcastBeaconEvent ()
 {
     // Prepare & send beacon
-    unique_ptr<RangingPacket> packet {new RangingPacket {}};
+    unique_ptr<BeaconFrame> frame {new BeaconFrame {}};
 
-    packet->setBitLength (10);
-    packet->setSequenceNumber (getNextPacketSequenceNumber ());
+    frame->setBitLength (10);
+    frame->setSequenceNumber (getNextPacketSequenceNumber ());
 
-    sendMacPacket (MACAddress::BROADCAST_ADDRESS, move (packet));
+    sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (frame.release ()));
 
     // Schedule next beacon
     unique_ptr<MasterAnchorSelfMessage> message {new MasterAnchorSelfMessage {}};

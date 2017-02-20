@@ -133,4 +133,4 @@ RangingHost::mobilityStateChangedCallback (cComponent* source,
     currentPosition = mobility->getCurrentPosition ();
 }
 
-} //namespace ipin2017
+} // namespace ipin2017

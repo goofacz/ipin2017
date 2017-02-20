@@ -3,7 +3,7 @@
 #include <omnetpp.h>
 
 #include "RangingApplication.h"
-#include "RangingPacket_m.h"
+#include "BeaconFrame_m.h"
 
 namespace ipin2017
 {
@@ -16,7 +16,7 @@ class MobileRangingApplication :
 
     void handleMessage (omnetpp::cMessage* message) override;
 
-    void handleRangingPacket (RangingPacket* packet);
+    void handleFrame (BeaconFrame* beaconFrame);
 
     omnetpp::SimTime broadcastReplyDelay {0};
 };
