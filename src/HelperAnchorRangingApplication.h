@@ -13,13 +13,11 @@ class HelperAnchorRangingApplication :
     public RangingApplication
 {
   private:
-    void initialize(int stage) override;
+    void initialize (int stage) override;
 
     void handleMessage (omnetpp::cMessage* message) override;
 
-    void handleFrame (RangingReplyFrame* frame);
-
-    void handleFrame (BeaconFrame* frame);
+    void handleFrame (Frame* frame);
 };
 
 }; // namespace ipin2017

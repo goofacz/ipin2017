@@ -50,7 +50,7 @@ network Network
         }
 
         Mobile1: MobileRangingHost {
-            @display("p=673,300");
+            @display("p=645,300");
             nic.mac.address = "DE-AD-BE-EF-00-01";
         }
 

@@ -5,6 +5,9 @@
 #include <HelperAnchorRangingApplication.h>
 #include <MACAddress.h>
 
+#include "RangingHost.h"
+#include "BackhaulMessage_m.h"
+#include "Ieee802Ctrl.h"
 
 using namespace inet;
 using namespace omnetpp;
@@ -35,33 +38,27 @@ HelperAnchorRangingApplication::handleMessage (cMessage* message)
     }
     else
     {
-        const auto frame = check_and_cast<const Frame*> (message);
-        switch (frame->getType ())
-        {
-            case BEACON_FRAME:
-                handleFrame (check_and_cast<BeaconFrame*> (message));
-                break;
-            case RANGING_REPLY_FRAME:
-                handleFrame (check_and_cast<RangingReplyFrame*> (message));
-                break;
-            default:
-                throw cRuntimeError ("Unsupported frame");
-        }
+        auto frame = check_and_cast<Frame*> (message);
+        handleFrame (frame);
     }
 
     delete message;
 }
 
 void
-HelperAnchorRangingApplication::handleFrame (RangingReplyFrame* message)
+HelperAnchorRangingApplication::handleFrame (Frame* frame)
 {
-    // TODO
-}
+    const auto frameControlInformation = check_and_cast<Ieee802Ctrl*> (frame->getControlInfo ());
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+    unique_ptr<BackhaulMessage> message {new BackhaulMessage};
 
-void
-HelperAnchorRangingApplication::handleFrame (BeaconFrame* message)
-{
-    // TODO
+    message->setReceptionTimestamp (rangingHost->getRxBeginTimestamp ());
+    message->setSourceAddress (frameControlInformation->getSourceAddress ());
+    message->setSequenceNumber (frame->getSequenceNumber ());
+
+    for (int i {0}; i < gateSize ("backhaulOut"); i++) {
+        send (message.release (), "backhaulOut", i);
+    }
 }
 
 }; // namespace ipin2017

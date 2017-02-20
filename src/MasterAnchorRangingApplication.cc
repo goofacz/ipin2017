@@ -42,14 +42,23 @@ MasterAnchorRangingApplication::handleMessage (cMessage* message)
     }
     else
     {
-        const auto frame = check_and_cast<const Frame*> (message);
-        switch (frame->getType ())
+        const auto arrivalGate = message->getArrivalGate ();
+
+        if (strcmp (arrivalGate->getBaseName (), "in") == 0)
         {
-            case RANGING_REPLY_FRAME:
-                handleFrame (check_and_cast<RangingReplyFrame*> (message));
-                break;
-            default:
-                throw cRuntimeError ("Unsupported frame");
+            const auto frame = check_and_cast<const Frame*> (message);
+            switch (frame->getType ())
+            {
+                case RANGING_REPLY_FRAME:
+                    handleFrame (check_and_cast<RangingReplyFrame*> (message));
+                    break;
+                default:
+                    throw cRuntimeError ("Unsupported frame");
+            }
+        }
+        else if (strcmp (arrivalGate->getBaseName (), "backhaulIn") == 0)
+        {
+            // TODO
         }
     }
 
