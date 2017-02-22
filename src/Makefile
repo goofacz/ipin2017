@@ -44,6 +44,7 @@ OBJS = \
     $O/MasterAnchorRangingApplication.o \
     $O/RangingHost.o \
     $O/MobileRangingApplication.o \
+    $O/BackhaulMessage.o \
     $O/RangingReplyFrame_m.o \
     $O/BeaconFrame_m.o \
     $O/BackhaulMessage_m.o \
@@ -152,13 +153,27 @@ depend:
 	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES) $(SM_CC_FILES)  ./*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+$O/BackhaulMessage.o: BackhaulMessage.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
+	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	BackhaulMessage.h \
+	BackhaulMessage_m.h \
+	Frame_m.h
 $O/BackhaulMessage_m.o: BackhaulMessage_m.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
-	BackhaulMessage_m.h
+	BackhaulMessage_m.h \
+	Frame_m.h
 $O/BeaconFrame_m.o: BeaconFrame_m.cc \
 	BeaconFrame_m.h \
 	Frame_m.h
@@ -204,6 +219,7 @@ $O/HelperAnchorRangingApplication.o: HelperAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
+	BackhaulMessage.h \
 	BackhaulMessage_m.h \
 	BeaconFrame_m.h \
 	Frame_m.h \
