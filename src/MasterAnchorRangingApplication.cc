@@ -6,8 +6,10 @@
 #include <MACAddress.h>
 
 #include "BeaconFrame_m.h"
+#include "RangingHost.h"
 
 using namespace inet;
+using namespace inet::physicallayer;
 using namespace omnetpp;
 using namespace std;
 
@@ -30,6 +32,10 @@ MasterAnchorRangingApplication::initialize(int stage)
         unique_ptr<MasterAnchorSelfMessage> message {new MasterAnchorSelfMessage {}};
         message->setEventType (BROADCAST_BEACON);
         scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
+
+        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        rangingHost->addTxStateChangedCallback ([this] (IRadio::TransmissionState state) { this->onTxStateChangedCallback (state); });
+        rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
     }
 }
 
@@ -58,7 +64,7 @@ MasterAnchorRangingApplication::handleMessage (cMessage* message)
         }
         else if (strcmp (arrivalGate->getBaseName (), "backhaulIn") == 0)
         {
-            // TODO
+            handleMessage (check_and_cast<BackhaulMessage*> (message));
         }
     }
 
@@ -73,6 +79,8 @@ MasterAnchorRangingApplication::handleSelfMessage (MasterAnchorSelfMessage* mess
         case BROADCAST_BEACON:
             handleBroadcastBeaconEvent ();
             break;
+        default:
+            throw cRuntimeError ("Unsupported self message");
     }
 }
 
@@ -84,6 +92,12 @@ MasterAnchorRangingApplication::handleFrame (RangingReplyFrame* frame)
         // TODO
     }
 
+    // TODO
+}
+
+void
+MasterAnchorRangingApplication::handleMessage (BackhaulMessage* message)
+{
     // TODO
 }
 
@@ -121,6 +135,22 @@ MasterAnchorRangingApplication::handleBroadcastBeaconEvent ()
     message->setEventType (BROADCAST_BEACON);
 
     scheduleSelfMessage (move (message), getBroadcastBeaconDelay (), SIMTIME_MS);
+}
+
+void
+MasterAnchorRangingApplication::onTxStateChangedCallback (IRadio::TransmissionState state)
+{
+    if (state == IRadio::TRANSMISSION_STATE_TRANSMITTING)    {
+        frameTransmissionTimestamp = simTime ();
+    }
+}
+
+void
+MasterAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
+{
+    if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
+        frameReceptionTimestamp = simTime ();
+    }
 }
 
 }; // namespace ipin2017

@@ -233,14 +233,47 @@ $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
 	$(INET_PROJ)/src/inet/common/INETMath.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/Units.h \
 	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/EulerAngles.h \
+	$(INET_PROJ)/src/inet/common/mapping/Interpolation.h \
+	$(INET_PROJ)/src/inet/common/mapping/MappingBase.h \
+	$(INET_PROJ)/src/inet/common/mapping/MappingUtils.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
+	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IAntenna.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IArrival.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IInterference.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListening.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IListeningDecision.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IModulation.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/INoise.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayer.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPhysicalLayerFrame.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IPrintableObject.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadio.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioFrame.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IRadioSignal.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceiver.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReception.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionDecision.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/IReceptionResult.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ISNIR.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
+	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
+	BackhaulMessage.h \
+	BackhaulMessage_m.h \
 	BeaconFrame_m.h \
 	Frame_m.h \
+	Listener.h \
 	MasterAnchorRangingApplication.h \
 	MasterAnchorSelfMessage_m.h \
 	RangingApplication.h \
+	RangingHost.h \
 	RangingReplyFrame_m.h
 $O/MasterAnchorSelfMessage_m.o: MasterAnchorSelfMessage_m.cc \
 	MasterAnchorSelfMessage_m.h
