@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for ipin2017
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/physicallayer/contract/packetlevel -I../../inet/src/inet/common -I../../inet/src/inet/common/geometry/common -I../../inet/src/inet/physicallayer/common/packetlevel -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
+#  opp_makemake -f --deep -I../../inet/src/inet/linklayer/common -I../../inet/src -I../../inet/src/inet/physicallayer/contract/packetlevel -I../../inet/src/inet/common/geometry/common -I../../inet/src/inet/common -I../../inet/src/inet/linklayer/ideal -I../../inet/src/inet/physicallayer/common/packetlevel -L../../inet/out/$$\(CONFIGNAME\)/src -lINET -KINET_PROJ=../../inet
 #
 
 # Name of target to be created (-o option)
@@ -19,8 +19,9 @@ INCLUDE_PATH = \
     -I../../inet/src/inet/linklayer/common \
     -I../../inet/src \
     -I../../inet/src/inet/physicallayer/contract/packetlevel \
-    -I../../inet/src/inet/common \
     -I../../inet/src/inet/common/geometry/common \
+    -I../../inet/src/inet/common \
+    -I../../inet/src/inet/linklayer/ideal \
     -I../../inet/src/inet/physicallayer/common/packetlevel \
     -I.
 
@@ -214,7 +215,9 @@ $O/HelperAnchorRangingApplication.o: HelperAnchorRangingApplication.cc \
 $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/Compat.h \
 	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
 	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
 	$(INET_PROJ)/src/inet/features.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	BeaconFrame_m.h \
@@ -241,6 +244,7 @@ $O/MobileRangingApplication.o: MobileRangingApplication.cc \
 	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
 	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
+	$(INET_PROJ)/src/inet/linklayer/ideal/IdealMacFrame_m.h \
 	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
 	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
@@ -386,6 +390,12 @@ $O/RangingHost.o: RangingHost.cc \
 	Listener.h \
 	RangingHost.h
 $O/RangingReplyFrame_m.o: RangingReplyFrame_m.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
+	$(INET_PROJ)/src/inet/features.h \
 	Frame_m.h \
 	RangingReplyFrame_m.h
 
