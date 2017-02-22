@@ -10,7 +10,7 @@ Register_Class(BackhaulMessage);
 BackhaulMessage::BackhaulMessage (const char *name, int kind) :
     BackhaulMessage_Base (name, kind)
 {
-    // ...
+    frame = nullptr;
 }
 
 BackhaulMessage::BackhaulMessage (const BackhaulMessage& other) :
@@ -49,14 +49,15 @@ BackhaulMessage::dup() const
 void
 BackhaulMessage::copy (const BackhaulMessage& other)
 {
-    if (frame)
-    {
+    if (frame)    {
         delete frame;
-        frame = nullptr;
     }
 
     if (other.frame)    {
         frame = other.frame->dup ();
+    }
+    else    {
+        frame = nullptr;
     }
 }
 
