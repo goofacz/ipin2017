@@ -272,6 +272,7 @@ $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	Listener.h \
 	MasterAnchorRangingApplication.h \
 	MasterAnchorSelfMessage_m.h \
+	Ranging.h \
 	RangingApplication.h \
 	RangingHost.h \
 	RangingReplyFrame_m.h

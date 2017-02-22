@@ -7,6 +7,7 @@
 #include "MasterAnchorSelfMessage_m.h"
 #include "RangingReplyFrame_m.h"
 #include "BackhaulMessage.h"
+#include "Ranging.h"
 
 namespace ipin2017
 {
@@ -42,6 +43,7 @@ class MasterAnchorRangingApplication :
     int broadcastBeaconDelay = 0;
     unsigned int packetSequenceNumberGenerator = 0;
 
+    std::vector<Beacon> beacons;
 };
 
 }; // namespace ipin2017
