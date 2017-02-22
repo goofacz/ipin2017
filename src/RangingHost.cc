@@ -21,22 +21,22 @@ RangingHost::getLocalAddress () const
     return localAddress;
 }
 
-const SimTime&
-RangingHost::getTxBeginTimestamp () const
-{
-    return txBeginTimestamp;
-}
-
-const SimTime&
-RangingHost::getRxBeginTimestamp () const
-{
-    return rxBeginTimestamp;
-}
-
 const Coord&
 RangingHost::getCurrentPosition () const
 {
     return currentPosition;
+}
+
+void
+RangingHost::addTxStateChangedCallback (TxStateChangedCallback callback)
+{
+    txStateChangedcallbacks.emplace_back (move (callback));
+}
+
+void
+RangingHost::addRxStateChangedCallback (RxStateChangedCallback callback)
+{
+    rxStateChangedcallbacks.emplace_back (move (callback));
 }
 
 void
@@ -70,9 +70,6 @@ RangingHost::initialize (int stage)
         receptionStateChangedListener = receptionStateChangedListenerFunction;
         radio->subscribe("receptionStateChanged", &receptionStateChangedListener);
 
-        rxCurrentState = radio->getReceptionState ();
-        txCurrentState = radio->getTransmissionState ();
-
         // Setup mobility
         const auto mobility = getModuleByPath(".mobility");
         assert (mobility);
@@ -97,14 +94,12 @@ RangingHost::transmissionStateChangedCallback (cComponent* source,
                                                long value,
                                                cObject* details)
 {
-    assert (txCurrentState != IRadio::TRANSMISSION_STATE_UNDEFINED);
-
-    const auto nextState = static_cast<IRadio::TransmissionState> (value);
-    if (txCurrentState == IRadio::TRANSMISSION_STATE_IDLE && nextState == IRadio::TRANSMISSION_STATE_TRANSMITTING)   {
-        txBeginTimestamp = simTime ();
+    const auto state = static_cast<IRadio::TransmissionState> (value);
+    for (const auto& callback : txStateChangedcallbacks)
+    {
+        assert (callback);
+        callback (state);
     }
-
-    txCurrentState = nextState;
 }
 
 void
@@ -113,14 +108,12 @@ RangingHost::receptionStateChangedCallback (cComponent* source,
                                             long value,
                                             cObject* details)
 {
-    assert (rxCurrentState != IRadio::RECEPTION_STATE_UNDEFINED);
-
-    const auto nextState = static_cast<IRadio::ReceptionState> (value);
-    if (rxCurrentState == IRadio::RECEPTION_STATE_IDLE && nextState == IRadio::RECEPTION_STATE_RECEIVING)   {
-        rxBeginTimestamp = simTime ();
+    const auto state = static_cast<IRadio::ReceptionState> (value);
+    for (const auto& callback : rxStateChangedcallbacks)
+    {
+        assert (callback);
+        callback (state);
     }
-
-    rxCurrentState = nextState;
 }
 
 void

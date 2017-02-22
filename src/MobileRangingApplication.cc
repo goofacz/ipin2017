@@ -2,6 +2,7 @@
 
 #include <INETDefs.h>
 #include <Ieee802Ctrl.h>
+#include <IdealMacFrame_m.h>
 
 #include "MobileRangingApplication.h"
 #include "RangingHost.h"
@@ -9,6 +10,7 @@
 #include "RangingReplyFrame_m.h"
 
 using namespace inet;
+using namespace inet::physicallayer;
 using namespace omnetpp;
 using namespace std;
 
@@ -27,6 +29,9 @@ MobileRangingApplication::initialize(int stage)
         const auto& broadcastReplyDelayParamater = par ("broadcastReplyDelay");
         assert (broadcastReplyDelayParamater.getType () == cPar::LONG);
         broadcastReplyDelay = SimTime {broadcastReplyDelayParamater.longValue (), SIMTIME_US};
+
+        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
     }
 }
 
@@ -57,18 +62,27 @@ void
 MobileRangingApplication::handleFrame (BeaconFrame* beaconFrame)
 {
     // Prepare & send reply
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
     auto packetControlInformation = check_and_cast<Ieee802Ctrl*> (beaconFrame->getControlInfo ());
     unique_ptr<RangingReplyFrame> rangingReplyFrame {new RangingReplyFrame};
 
-    rangingReplyFrame->setBitLength (4);
+    rangingReplyFrame->setBitLength (10);
     rangingReplyFrame->setSequenceNumber (beaconFrame->getSequenceNumber () + 1);
+    rangingReplyFrame->setRealPosition (rangingHost->getCurrentPosition ());
 
     // Compute delay
-    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
-    SimTime delay {broadcastReplyDelay - (simTime () - rangingHost->getRxBeginTimestamp ())};
+    SimTime delay {broadcastReplyDelay - (simTime () - broadcastReceptionTimestamp)};
     EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
 
     sendFrame (packetControlInformation->getSourceAddress (), unique_ptr<Frame> (rangingReplyFrame.release ()), delay);
+}
+
+void
+MobileRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
+{
+    if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
+        broadcastReceptionTimestamp = simTime ();
+    }
 }
 
 }; // namespace ipin2017

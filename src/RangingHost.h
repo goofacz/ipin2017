@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <omnetpp.h>
 #include <MACAddress.h>
 #include <Coord.h>
@@ -11,16 +13,20 @@ namespace ipin2017
 {
 
 class RangingHost :
-    public omnetpp::cModule
+    public omnetpp::cSimpleModule
 {
+    public:
+        using TxStateChangedCallback = std::function<void(inet::physicallayer::IRadio::TransmissionState)>;
+        using RxStateChangedCallback = std::function<void(inet::physicallayer::IRadio::ReceptionState)>;
+
     public:
         const inet::MACAddress& getLocalAddress () const;
 
-        const omnetpp::SimTime& getTxBeginTimestamp () const;
-
-        const omnetpp::SimTime& getRxBeginTimestamp () const;
-
         const inet::Coord& getCurrentPosition () const;
+
+        void addTxStateChangedCallback (TxStateChangedCallback callback);
+
+        void addRxStateChangedCallback (RxStateChangedCallback callback);
 
     protected:
         void initialize (int stage) override;
@@ -49,10 +55,9 @@ class RangingHost :
         Listener<long> transmissionStateChangedListener;
         Listener<long> receptionStateChangedListener;
         Listener<omnetpp::cObject*> mobilityStateChangedListener;
-        inet::physicallayer::IRadio::TransmissionState txCurrentState {inet::physicallayer::IRadio::TRANSMISSION_STATE_UNDEFINED};
-        inet::physicallayer::IRadio::ReceptionState rxCurrentState {inet::physicallayer::IRadio::RECEPTION_STATE_UNDEFINED};
-        omnetpp::SimTime txBeginTimestamp {0};
-        omnetpp::SimTime rxBeginTimestamp {0};
+
+        std::vector<TxStateChangedCallback> txStateChangedcallbacks;
+        std::vector<RxStateChangedCallback> rxStateChangedcallbacks;
 };
 
 } // namespace ipin2017
