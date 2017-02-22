@@ -6,10 +6,11 @@
 #include <MACAddress.h>
 
 #include "RangingHost.h"
-#include "BackhaulMessage_m.h"
+#include "BackhaulMessage.h"
 #include "Ieee802Ctrl.h"
 
 using namespace inet;
+using namespace inet::physicallayer;
 using namespace omnetpp;
 using namespace std;
 
@@ -25,7 +26,8 @@ HelperAnchorRangingApplication::initialize(int stage)
 
     if (stage == INITSTAGE_APPLICATION_LAYER)
     {
-        // TODO
+        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
     }
 }
 
@@ -48,16 +50,23 @@ HelperAnchorRangingApplication::handleMessage (cMessage* message)
 void
 HelperAnchorRangingApplication::handleFrame (Frame* frame)
 {
-    const auto frameControlInformation = check_and_cast<Ieee802Ctrl*> (frame->getControlInfo ());
     const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
     unique_ptr<BackhaulMessage> message {new BackhaulMessage};
-
-    message->setReceptionTimestamp (rangingHost->getRxBeginTimestamp ());
-    message->setSourceAddress (frameControlInformation->getSourceAddress ());
-    message->setSequenceNumber (frame->getSequenceNumber ());
+    message->setAddress (rangingHost->getLocalAddress ());
+    message->setPosition (rangingHost->getCurrentPosition ());
+    message->setFrame (frame->dup ());
+    message->setReceptionTimestamp (frameReceptionTimestamp);
 
     for (int i {0}; i < gateSize ("backhaulOut"); i++) {
-        send (message.release (), "backhaulOut", i);
+        send (message->dup (), "backhaulOut", i);
+    }
+}
+
+void
+HelperAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
+{
+    if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
+        frameReceptionTimestamp = simTime ();
     }
 }
 
