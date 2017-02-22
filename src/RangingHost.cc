@@ -56,7 +56,6 @@ RangingHost::initialize (int stage)
 
         // Setup radio
         const auto radio = check_and_cast<Radio*> (getModuleByPath(".nic.radio"));
-        assert (radio);
 
         auto transmissionStateChangedFunction = [this] (cComponent* source, simsignal_t signalID, long value, cObject* details)  {
             this->transmissionStateChangedCallback (source, signalID, value, details);
@@ -71,14 +70,16 @@ RangingHost::initialize (int stage)
         radio->subscribe("receptionStateChanged", &receptionStateChangedListener);
 
         // Setup mobility
-        const auto mobility = getModuleByPath(".mobility");
-        assert (mobility);
+        auto mobility = getModuleByPath(".mobility");
 
         auto mobilityStateChangedListenerFunction = [this] (cComponent* source, simsignal_t signalID, cObject* value, cObject* details)  {
             this->mobilityStateChangedCallback (source, signalID, value, details);
         };
         mobilityStateChangedListener = mobilityStateChangedListenerFunction;
         mobility->subscribe("mobilityStateChanged", &mobilityStateChangedListener);
+
+        auto iMobility = check_and_cast<IMobility*> (mobility);
+        currentPosition = iMobility->getCurrentPosition ();
     }
 }
 
