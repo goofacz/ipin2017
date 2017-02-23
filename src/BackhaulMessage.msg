@@ -18,7 +18,8 @@ message BackhaulMessage
 {
     @customize(true);
 	omnetpp::SimTime receptionTimestamp;
-	inet::MACAddress address;
+	inet::MACAddress helperAnchorAddress;
+	inet::MACAddress frameSourceAddress;
     inet::Coord position;
     FramePointer frame = nullptr;
 

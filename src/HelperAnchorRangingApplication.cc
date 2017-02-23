@@ -4,10 +4,10 @@
 #include <INETDefs.h>
 #include <HelperAnchorRangingApplication.h>
 #include <MACAddress.h>
+#include <Ieee802Ctrl.h>
 
 #include "RangingHost.h"
 #include "BackhaulMessage.h"
-#include "Ieee802Ctrl.h"
 
 using namespace inet;
 using namespace inet::physicallayer;
@@ -50,9 +50,11 @@ HelperAnchorRangingApplication::handleMessage (cMessage* message)
 void
 HelperAnchorRangingApplication::handleFrame (Frame* frame)
 {
+    const auto packetControlInformation = check_and_cast<const Ieee802Ctrl*> (frame->getControlInfo ());
     const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
     unique_ptr<BackhaulMessage> message {new BackhaulMessage};
-    message->setAddress (rangingHost->getLocalAddress ());
+    message->setHelperAnchorAddress (rangingHost->getLocalAddress ());
+    message->setFrameSourceAddress (packetControlInformation->getSourceAddress ());
     message->setPosition (rangingHost->getCurrentPosition ());
     message->setFrame (frame->dup ());
     message->setReceptionTimestamp (frameReceptionTimestamp);

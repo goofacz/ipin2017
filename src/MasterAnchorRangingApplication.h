@@ -6,6 +6,7 @@
 #include "RangingApplication.h"
 #include "MasterAnchorSelfMessage_m.h"
 #include "RangingReplyFrame_m.h"
+#include "BeaconFrame_m.h"
 #include "BackhaulMessage.h"
 #include "Ranging.h"
 
@@ -24,7 +25,13 @@ class MasterAnchorRangingApplication :
 
     void handleFrame (RangingReplyFrame* frame);
 
-    void handleMessage (BackhaulMessage* message);
+    void handleBackhaulMessage (const BackhaulMessage* message);
+
+    void handleBackhaulMessage (const BackhaulMessage* message,
+                                const RangingReplyFrame* frame);
+
+    void handleBackhaulMessage (const BackhaulMessage* message,
+                                const BeaconFrame* frame);
 
     void handleBroadcastBeaconEvent ();
 
@@ -38,7 +45,6 @@ class MasterAnchorRangingApplication :
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
-    omnetpp::SimTime frameTransmissionTimestamp {0};
     omnetpp::SimTime frameReceptionTimestamp {0};
     int broadcastBeaconDelay = 0;
     unsigned int packetSequenceNumberGenerator = 0;

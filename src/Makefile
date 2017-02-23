@@ -240,7 +240,11 @@ $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/common/mapping/MappingBase.h \
 	$(INET_PROJ)/src/inet/common/mapping/MappingUtils.h \
 	$(INET_PROJ)/src/inet/features.h \
+	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl.h \
+	$(INET_PROJ)/src/inet/linklayer/common/Ieee802Ctrl_m.h \
 	$(INET_PROJ)/src/inet/linklayer/common/MACAddress.h \
+	$(INET_PROJ)/src/inet/linklayer/contract/IMACProtocolControlInfo.h \
+	$(INET_PROJ)/src/inet/linklayer/ideal/IdealMacFrame_m.h \
 	$(INET_PROJ)/src/inet/mobility/contract/IMobility.h \
 	$(INET_PROJ)/src/inet/physicallayer/base/packetlevel/PhysicalLayerDefs.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/bitlevel/ISignalAnalogModel.h \
@@ -275,7 +279,8 @@ $O/MasterAnchorRangingApplication.o: MasterAnchorRangingApplication.cc \
 	Ranging.h \
 	RangingApplication.h \
 	RangingHost.h \
-	RangingReplyFrame_m.h
+	RangingReplyFrame_m.h \
+	Utilities.h
 $O/MasterAnchorSelfMessage_m.o: MasterAnchorSelfMessage_m.cc \
 	MasterAnchorSelfMessage_m.h
 $O/MobileRangingApplication.o: MobileRangingApplication.cc \
