@@ -22,7 +22,9 @@ BackhaulMessage::BackhaulMessage (const BackhaulMessage& other) :
 
 BackhaulMessage::~BackhaulMessage ()
 {
-    if (frame)  {
+    if (frame)
+    {
+        drop(frame);
         delete frame;
     }
 }
@@ -47,17 +49,33 @@ BackhaulMessage::dup() const
 }
 
 void
+BackhaulMessage::setFrame(const FramePointer& frame)
+{
+    if (this->frame)
+    {
+        drop(this->frame);
+        delete this->frame;
+    }
+
+    this->frame = frame;
+    take(this->frame);
+}
+
+void
 BackhaulMessage::copy (const BackhaulMessage& other)
 {
-    if (frame)    {
+    if (frame)
+    {
+        drop(frame);
         delete frame;
     }
 
-    if (other.frame)    {
+    frame = nullptr;
+
+    if (other.frame)
+    {
         frame = other.frame->dup ();
-    }
-    else    {
-        frame = nullptr;
+        take(frame);
     }
 }
 

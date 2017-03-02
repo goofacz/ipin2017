@@ -18,6 +18,8 @@ class BackhaulMessage : public BackhaulMessage_Base
 
         BackhaulMessage* dup () const override;
 
+        void setFrame(const FramePointer& frame) override;
+
     private:
         void copy (const BackhaulMessage& other);
 };
