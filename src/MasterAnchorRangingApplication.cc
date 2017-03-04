@@ -305,7 +305,7 @@ MasterAnchorRangingApplication::storeSimulationResults () noexcept
     for (const auto& beacon : beacons)
     {
         beaconsFile << beacon.sequenceNumber << ',';
-        beaconsFile << beacon.masterAnchorAddress.str () << ',';
+        beaconsFile << beacon.masterAnchorAddress.getInt () << ',';
         beaconsFile << beacon.transmissionTimestamp.inUnit (SIMTIME_PS) << ',';
         beaconsFile << beacon.masterAnchorPosition.x << ',';
         beaconsFile << beacon.masterAnchorPosition.y << ',';
@@ -314,17 +314,17 @@ MasterAnchorRangingApplication::storeSimulationResults () noexcept
         for (const auto& beaconEcho : beacon.beaconEchos)
         {
             beaconEchosFile << beaconEcho.sequenceNumber << ',';
-            beaconEchosFile << beaconEcho.helperAnchorAddress.str () << ',';
+            beaconEchosFile << beaconEcho.helperAnchorAddress.getInt () << ',';
             beaconEchosFile << beaconEcho.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
             beaconEchosFile << beaconEcho.helperAnchorPosition.x << ',';
             beaconEchosFile << beaconEcho.helperAnchorPosition.y << ',';
-            beaconEchosFile << beaconEcho.helperAnchorPosition.y << '\n';
+            beaconEchosFile << beaconEcho.helperAnchorPosition.z << '\n';
         }
 
         for (const auto& rangingReply : beacon.mobileReplies)
         {
             rangingRepliesFile << rangingReply.sequenceNumber << ',';
-            rangingRepliesFile << rangingReply.address.str () << ',';
+            rangingRepliesFile << rangingReply.address.getInt () << ',';
             rangingRepliesFile << rangingReply.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
             rangingRepliesFile << rangingReply.processingDelay.inUnit (SIMTIME_PS) << ',';
             rangingRepliesFile << rangingReply.realPosition.x << ',';
@@ -334,7 +334,7 @@ MasterAnchorRangingApplication::storeSimulationResults () noexcept
             for (const auto& rangingReplyEcho : rangingReply.echos)
             {
                 rangingReplyEchosFile << rangingReplyEcho.sequenceNumber << ',';
-                rangingReplyEchosFile << rangingReplyEcho.helperAnchorAddress.str () << ',';
+                rangingReplyEchosFile << rangingReplyEcho.helperAnchorAddress.getInt () << ',';
                 rangingReplyEchosFile << rangingReplyEcho.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
                 rangingReplyEchosFile << rangingReplyEcho.helperAnchorPosition.x << ',';
                 rangingReplyEchosFile << rangingReplyEcho.helperAnchorPosition.y << ',';
