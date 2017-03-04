@@ -69,6 +69,7 @@ MobileRangingApplication::handleFrame (BeaconFrame* beaconFrame)
     rangingReplyFrame->setBitLength (10);
     rangingReplyFrame->setSequenceNumber (beaconFrame->getSequenceNumber () + 1);
     rangingReplyFrame->setRealPosition (rangingHost->getCurrentPosition ());
+    rangingReplyFrame->setProcessingDelay (broadcastReplyDelay);
 
     // Compute delay
     SimTime delay {broadcastReplyDelay - (simTime () - broadcastReceptionTimestamp)};

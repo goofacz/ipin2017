@@ -11,6 +11,7 @@ namespace ipin2017
 
 struct MobileReplyEcho
 {
+    unsigned int sequenceNumber {0};
     omnetpp::SimTime receptionTimestamp {0};
     inet::Coord helperAnchorPosition {0, 0};
     inet::MACAddress helperAnchorAddress {inet::MACAddress::UNSPECIFIED_ADDRESS};
@@ -18,15 +19,18 @@ struct MobileReplyEcho
 
 struct MobileReply
 {
+    unsigned int sequenceNumber {0};
     omnetpp::SimTime receptionTimestamp {0};
-    inet::Coord mobileRealPosition {0, 0};
-    inet::MACAddress mobileAddress {inet::MACAddress::UNSPECIFIED_ADDRESS};
+    omnetpp::SimTime processingDelay {0};
+    inet::Coord realPosition {0, 0};
+    inet::MACAddress address {inet::MACAddress::UNSPECIFIED_ADDRESS};
 
     std::vector<MobileReplyEcho> echos;
 };
 
 struct BeaconEcho
 {
+    unsigned int sequenceNumber {0};
     omnetpp::SimTime receptionTimestamp {0};
     inet::Coord helperAnchorPosition {0, 0};
     inet::MACAddress helperAnchorAddress {inet::MACAddress::UNSPECIFIED_ADDRESS};

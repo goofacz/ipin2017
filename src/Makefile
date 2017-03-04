@@ -39,25 +39,25 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/RangingApplication.o \
-    $O/RangingHost.o \
-    $O/BackhaulMessage.o \
-    $O/MobileRangingApplication.o \
     $O/HelperAnchorRangingApplication.o \
+    $O/RangingApplication.o \
     $O/MasterAnchorRangingApplication.o \
-    $O/Frame_m.o \
+    $O/RangingHost.o \
+    $O/MobileRangingApplication.o \
+    $O/BackhaulMessage.o \
+    $O/RangingReplyFrame_m.o \
     $O/BeaconFrame_m.o \
     $O/BackhaulMessage_m.o \
-    $O/MasterAnchorSelfMessage_m.o \
-    $O/RangingReplyFrame_m.o
+    $O/Frame_m.o \
+    $O/MasterAnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
-    Frame.msg \
+    RangingReplyFrame.msg \
     BeaconFrame.msg \
     BackhaulMessage.msg \
-    MasterAnchorSelfMessage.msg \
-    RangingReplyFrame.msg
+    Frame.msg \
+    MasterAnchorSelfMessage.msg
 
 # SM files
 SMFILES =

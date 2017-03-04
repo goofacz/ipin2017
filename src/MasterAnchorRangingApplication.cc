@@ -1,6 +1,7 @@
 #include <cassert>
 #include <memory>
 #include <algorithm>
+#include <fstream>
 
 #include <INETDefs.h>
 #include <MasterAnchorRangingApplication.h>
@@ -40,7 +41,19 @@ MasterAnchorRangingApplication::initialize(int stage)
         const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
         rangingHost->addTxStateChangedCallback ([this] (IRadio::TransmissionState state) { this->onTxStateChangedCallback (state); });
         rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
+
+        const auto& simulationResultSuffixParameter = par("simulationResultSuffix");
+        assert (simulationResultSuffixParameter.getType () == cPar::STRING);
+        simulationResultSuffix = simulationResultSuffixParameter.stdstringValue();
+        assert(!simulationResultSuffix.empty());
     }
+}
+
+void
+MasterAnchorRangingApplication::finish ()
+{
+    RangingApplication::finish ();
+    storeSimulationResults ();
 }
 
 void
@@ -102,12 +115,15 @@ MasterAnchorRangingApplication::handleFrame (RangingReplyFrame* frame)
     const auto packetControlInformation = check_and_cast<const Ieee802Ctrl*> (frame->getControlInfo ());
 
     const auto mobileReply = find_if (beacon->mobileReplies.rbegin (), beacon->mobileReplies.rend (), [packetControlInformation] (const MobileReply& element) {
-        return element.mobileAddress == packetControlInformation->getSourceAddress ();
+        return element.address == packetControlInformation->getSourceAddress ();
     });
 
+    mobileReply->sequenceNumber = frame->getSequenceNumber ();
     mobileReply->receptionTimestamp = frameReceptionTimestamp;
+    mobileReply->processingDelay = frame->getProcessingDelay ();
+    mobileReply->realPosition = frame->getRealPosition ();
 
-    EV << "Ranging reply received from " << mobileReply->mobileAddress.str () << " at " << mobileReply->receptionTimestamp << endl;
+    EV << "Ranging reply received from " << mobileReply->address.str () << " at " << mobileReply->receptionTimestamp << '\n';
 }
 
 void
@@ -136,29 +152,29 @@ MasterAnchorRangingApplication::handleBackhaulMessage (const BackhaulMessage* me
     EXPECT (!(beacon == beacons.rend ()), "Invalid ranging reply received on backhaul");
 
     auto mobileReply = find_if (beacon->mobileReplies.rbegin (), beacon->mobileReplies.rend (), [message] (const MobileReply& element) {
-        return element.mobileAddress == message->getFrameSourceAddress ();
+        return element.address == message->getFrameSourceAddress ();
     });
 
     if (mobileReply == beacon->mobileReplies.rend ())
     {
-        MobileReply dummyMobileReply;
-        dummyMobileReply.mobileAddress = message->getFrameSourceAddress ();
-        dummyMobileReply.mobileRealPosition = frame->getRealPosition ();
-        beacon->mobileReplies.emplace_back (move (dummyMobileReply));
+        MobileReply newMobileReply;
+        newMobileReply.address = message->getFrameSourceAddress ();
+        beacon->mobileReplies.emplace_back (move (newMobileReply));
 
         mobileReply = find_if (beacon->mobileReplies.rbegin (), beacon->mobileReplies.rend (), [message] (const MobileReply& element) {
-            return element.mobileAddress == message->getFrameSourceAddress ();
+            return element.address == message->getFrameSourceAddress ();
         });
     }
 
     MobileReplyEcho mobileReplyEcho;
+    mobileReplyEcho.sequenceNumber = frame->getSequenceNumber ();
     mobileReplyEcho.receptionTimestamp = message->getReceptionTimestamp ();
     mobileReplyEcho.helperAnchorAddress = message->getHelperAnchorAddress ();
     mobileReplyEcho.helperAnchorPosition = message->getPosition ();
 
     EXPECT (!(mobileReply == beacon->mobileReplies.rend ()), "Invalid ranging reply received on backhaul");
 
-    EV << "Ranging reply echo received from " << mobileReplyEcho.helperAnchorAddress.str () << " at " << mobileReplyEcho.receptionTimestamp << endl;
+    EV << "Ranging reply echo received from " << mobileReplyEcho.helperAnchorAddress.str () << " at " << mobileReplyEcho.receptionTimestamp << '\n';
 
     mobileReply->echos.emplace_back (move (mobileReplyEcho));
 }
@@ -167,6 +183,13 @@ void
 MasterAnchorRangingApplication::handleBackhaulMessage (const BackhaulMessage* message,
                                                        const BeaconFrame* frame)
 {
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+    if (message->getFrameSourceAddress() != rangingHost->getLocalAddress())
+    {
+        EV_WARN << "Beacon echo received, but not meant for me, dropping message\n";
+        return;
+    }
+
     const auto beacon = find_if (beacons.rbegin (), beacons.rend (), [frame] (const Beacon& element) {
         return frame->getSequenceNumber () == element.sequenceNumber;
     });
@@ -174,11 +197,12 @@ MasterAnchorRangingApplication::handleBackhaulMessage (const BackhaulMessage* me
     EXPECT (!(beacon == beacons.rend ()), "Invalid beacon received on backhaul");
 
     BeaconEcho beaconEcho;
+    beaconEcho.sequenceNumber = frame->getSequenceNumber ();
     beaconEcho.receptionTimestamp = message->getReceptionTimestamp ();
     beaconEcho.helperAnchorAddress = message->getHelperAnchorAddress ();
     beaconEcho.helperAnchorPosition = message->getPosition ();
 
-    EV << "Beacon echo received from " << beaconEcho.helperAnchorAddress.str () << " at " << beaconEcho.receptionTimestamp << endl;
+    EV << "Beacon echo received from " << beaconEcho.helperAnchorAddress.str () << " at " << beaconEcho.receptionTimestamp << '\n';
 
     beacon->beaconEchos.push_back (move (beaconEcho));
 }
@@ -235,12 +259,12 @@ MasterAnchorRangingApplication::onTxStateChangedCallback (IRadio::TransmissionSt
         EXPECT (frame->getSequenceNumber () == getCurrentPacketSequenceNumber (), "Transmitted frame is not a valid beacon");
 
         Beacon beacon;
+        beacon.sequenceNumber = frame->getSequenceNumber ();
         beacon.transmissionTimestamp = simTime ();
         beacon.masterAnchorAddress = rangingHost->getLocalAddress ();
         beacon.masterAnchorPosition = rangingHost->getCurrentPosition ();
-        beacon.sequenceNumber = frame->getSequenceNumber ();
 
-        EV << "Beacon seq. no. " << beacon.sequenceNumber << " sent at" << beacon.transmissionTimestamp << endl;
+        EV << "Beacon seq. no. " << beacon.sequenceNumber << " sent at " << beacon.transmissionTimestamp << '\n';
 
         beacons.emplace_back (move (beacon));
     }
@@ -252,6 +276,77 @@ MasterAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState
     if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
         frameReceptionTimestamp = simTime ();
     }
+}
+
+void
+MasterAnchorRangingApplication::storeSimulationResults () noexcept
+{
+    ostringstream fileName;
+    ofstream beaconsFile;
+    ofstream beaconEchosFile;
+    ofstream rangingRepliesFile;
+    ofstream rangingReplyEchosFile;
+
+    fileName << "beacons" << simulationResultSuffix;
+    beaconsFile.open (fileName.str (), ios_base::out | ios_base::app);
+
+    fileName.str ("");
+    fileName << "beacon_echos" << simulationResultSuffix;
+    beaconEchosFile.open (fileName.str (), ios_base::out | ios_base::app);
+
+    fileName.str ("");
+    fileName << "ranging_replies" << simulationResultSuffix;
+    rangingRepliesFile.open (fileName.str (), ios_base::out | ios_base::app);
+
+    fileName.str ("");
+    fileName << "ranging_reply_echos" << simulationResultSuffix;
+    rangingReplyEchosFile.open (fileName.str (), ios_base::out | ios_base::app);
+
+    for (const auto& beacon : beacons)
+    {
+        beaconsFile << beacon.sequenceNumber << ',';
+        beaconsFile << beacon.masterAnchorAddress.str () << ',';
+        beaconsFile << beacon.transmissionTimestamp.inUnit (SIMTIME_PS) << ',';
+        beaconsFile << beacon.masterAnchorPosition.x << ',';
+        beaconsFile << beacon.masterAnchorPosition.y << ',';
+        beaconsFile << beacon.masterAnchorPosition.z << '\n';
+
+        for (const auto& beaconEcho : beacon.beaconEchos)
+        {
+            beaconEchosFile << beaconEcho.sequenceNumber << ',';
+            beaconEchosFile << beaconEcho.helperAnchorAddress.str () << ',';
+            beaconEchosFile << beaconEcho.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
+            beaconEchosFile << beaconEcho.helperAnchorPosition.x << ',';
+            beaconEchosFile << beaconEcho.helperAnchorPosition.y << ',';
+            beaconEchosFile << beaconEcho.helperAnchorPosition.y << '\n';
+        }
+
+        for (const auto& rangingReply : beacon.mobileReplies)
+        {
+            rangingRepliesFile << rangingReply.sequenceNumber << ',';
+            rangingRepliesFile << rangingReply.address.str () << ',';
+            rangingRepliesFile << rangingReply.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
+            rangingRepliesFile << rangingReply.processingDelay.inUnit (SIMTIME_PS) << ',';
+            rangingRepliesFile << rangingReply.realPosition.x << ',';
+            rangingRepliesFile << rangingReply.realPosition.y << ',';
+            rangingRepliesFile << rangingReply.realPosition.z << '\n';
+
+            for (const auto& rangingReplyEcho : rangingReply.echos)
+            {
+                rangingReplyEchosFile << rangingReplyEcho.sequenceNumber << ',';
+                rangingReplyEchosFile << rangingReplyEcho.helperAnchorAddress.str () << ',';
+                rangingReplyEchosFile << rangingReplyEcho.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
+                rangingReplyEchosFile << rangingReplyEcho.helperAnchorPosition.x << ',';
+                rangingReplyEchosFile << rangingReplyEcho.helperAnchorPosition.y << ',';
+                rangingReplyEchosFile << rangingReplyEcho.helperAnchorPosition.z << '\n';
+            }
+        }
+    }
+
+    beaconsFile.flush ();
+    beaconEchosFile.flush ();
+    rangingRepliesFile.flush ();
+    rangingReplyEchosFile.flush ();
 }
 
 }; // namespace ipin2017

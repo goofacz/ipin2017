@@ -6,6 +6,7 @@ simple MasterAnchorRangingApplication extends RangingApplication
 	    @class(MasterAnchorRangingApplication);
 	    int broadcastBeaconDelay @unit(ms) = default(5s);
 	    int backhaulInSize = default(0);
+	    string simulationResultSuffix @prompt("Matlab output:") = default("_result");
 
 	gates:
         input backhaulIn[backhaulInSize] @loose;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <omnetpp.h>
 #include <IRadio.h>
 
@@ -18,6 +19,8 @@ class MasterAnchorRangingApplication :
 {
   private:
     void initialize(int stage) override;
+
+    void finish() override;
 
     void handleMessage (omnetpp::cMessage* message) override;
 
@@ -45,9 +48,12 @@ class MasterAnchorRangingApplication :
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
+    void storeSimulationResults () noexcept;
+
     omnetpp::SimTime frameReceptionTimestamp {0};
-    int broadcastBeaconDelay = 0;
-    unsigned int packetSequenceNumberGenerator = 0;
+    int broadcastBeaconDelay {0};
+    unsigned int packetSequenceNumberGenerator {0};
+    std::string simulationResultSuffix {""};
 
     std::vector<Beacon> beacons;
 };
