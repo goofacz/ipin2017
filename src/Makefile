@@ -39,26 +39,28 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/RangingApplication.o \
-    $O/RangingHost.o \
-    $O/BackhaulMessage.o \
-    $O/MobileRangingApplication.o \
     $O/HelperAnchorRangingApplication.o \
-    $O/TDoAAnchorRangingApplication.o \
+    $O/RangingApplication.o \
     $O/MasterAnchorRangingApplication.o \
-    $O/Frame_m.o \
+    $O/RangingHost.o \
+    $O/MobileRangingApplication.o \
+    $O/TDoAAnchorRangingApplication.o \
+    $O/BackhaulMessage.o \
+    $O/RangingReplyFrame_m.o \
+    $O/TDoAAnchorSelfMessage_m.o \
     $O/BeaconFrame_m.o \
     $O/BackhaulMessage_m.o \
-    $O/MasterAnchorSelfMessage_m.o \
-    $O/RangingReplyFrame_m.o
+    $O/Frame_m.o \
+    $O/MasterAnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
-    Frame.msg \
+    RangingReplyFrame.msg \
+    TDoAAnchorSelfMessage.msg \
     BeaconFrame.msg \
     BackhaulMessage.msg \
-    MasterAnchorSelfMessage.msg \
-    RangingReplyFrame.msg
+    Frame.msg \
+    MasterAnchorSelfMessage.msg
 
 # SM files
 SMFILES =
@@ -495,16 +497,15 @@ $O/TDoAAnchorRangingApplication.o: TDoAAnchorRangingApplication.cc \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmission.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/ITransmitter.h \
 	$(INET_PROJ)/src/inet/physicallayer/contract/packetlevel/RadioControlInfo_m.h \
-	BackhaulMessage.h \
-	BackhaulMessage_m.h \
 	BeaconFrame_m.h \
 	Frame_m.h \
 	Listener.h \
-	MasterAnchorSelfMessage_m.h \
 	Ranging.h \
 	RangingApplication.h \
 	RangingHost.h \
-	RangingReplyFrame_m.h \
 	TDoAAnchorRangingApplication.h \
+	TDoAAnchorSelfMessage_m.h \
 	Utilities.h
+$O/TDoAAnchorSelfMessage_m.o: TDoAAnchorSelfMessage_m.cc \
+	TDoAAnchorSelfMessage_m.h
 

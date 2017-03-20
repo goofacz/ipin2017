@@ -20,8 +20,6 @@ module TDoAAnchorRangingHost extends RangingHost
     parameters:
         @display("i=device/accesspoint");
 
-        int backhaulInSize = default(0);
-
         mobilityType = "StationaryMobility";
         nic.mac.promiscuous = true;
 

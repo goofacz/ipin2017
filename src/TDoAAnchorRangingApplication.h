@@ -5,11 +5,9 @@
 #include <IRadio.h>
 
 #include "RangingApplication.h"
-#include "MasterAnchorSelfMessage_m.h"
-#include "RangingReplyFrame_m.h"
-#include "BeaconFrame_m.h"
-#include "BackhaulMessage.h"
+#include "TDoAAnchorSelfMessage_m.h"
 #include "Ranging.h"
+#include "BeaconFrame_m.h"
 
 namespace ipin2017
 {
@@ -23,6 +21,20 @@ class TDoAAnchorRangingApplication :
     void finish() override;
 
     void handleMessage (omnetpp::cMessage* message) override;
+
+    void handlFrame (BeaconFrame* frame);
+
+    void handleSelfMessage (TDoAAnchorSelfMessage* selfMessage);
+
+    unsigned int getCurrentPacketSequenceNumber () const;
+
+    unsigned int getNextPacketSequenceNumber ();
+
+    void sendBeaconFrame (const SimTime& delay);
+
+    unsigned int broadcastBeaconDelay {0};
+    omnetpp::SimTime echoBeaconDelay {0};
+    unsigned int packetSequenceNumberGenerator {0};
 };
 
 }; // namespace ipin2017
