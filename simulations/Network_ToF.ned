@@ -51,6 +51,7 @@ network Network_ToF
 
         Mobile1: MobileRangingHost {
             @display("p=545,300");
+            applicationType = "MobileRangingApplication";
             nic.mac.address = "DE-AD-BE-EF-00-01";
         }
 

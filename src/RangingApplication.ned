@@ -1,11 +1,11 @@
 package ipin2017;
 
-simple RangingApplication
+simple RangingApplication like IRangingApplication
 {
     parameters:
 	    @class(RangingApplication);
 
-    gates:
+	gates:
 	    input in;
 	    output out;
 }
