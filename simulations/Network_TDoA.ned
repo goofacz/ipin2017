@@ -47,6 +47,7 @@ network Network_TDoA
 
         Mobile1: MobileRangingHost {
             @display("p=645,300");
+            applicationType = "TDoAMobileRangingApplication";
             nic.mac.address = "DE-AD-BE-EF-00-01";
         }
 }
