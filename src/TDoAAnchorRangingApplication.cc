@@ -88,10 +88,6 @@ TDoAAnchorRangingApplication::handlFrame (BeaconFrame* frame)
     {
         // Compute delay
         SimTime delay {echoBeaconDelay - (simTime () - beaconReceptionTimestamp)};
-        EV << delay << endl;
-        EV << echoBeaconDelay << endl;
-        EV << simTime () << endl;
-        EV << beaconReceptionTimestamp << endl;
         EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
 
         sendBeaconFrame (delay);
@@ -123,11 +119,14 @@ TDoAAnchorRangingApplication::getNextPacketSequenceNumber ()
 void
 TDoAAnchorRangingApplication::sendBeaconFrame (const SimTime& delay)
 {
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+
     // Prepare & send beacon
     unique_ptr<BeaconFrame> frame {new BeaconFrame {}};
 
     frame->setBitLength (10);
     frame->setSequenceNumber (getNextPacketSequenceNumber ());
+    frame->setPosition (rangingHost->getCurrentPosition ());
 
     sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (frame.release ()), delay);
 }

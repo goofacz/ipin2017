@@ -13,17 +13,28 @@ class TDoAMobileRangingApplication :
     public RangingApplication
 {
   private:
-    using BeaconPair = std::pair<std::unique_ptr<const BeaconFrame>, omnetpp::SimTime>;
+    struct ReceivedBeacon
+    {
+        ReceivedBeacon (std::unique_ptr<const BeaconFrame> beacon,
+                        omnetpp::SimTime receptionTimestamp,
+                        inet::Coord realPosition);
+
+        std::unique_ptr<const BeaconFrame> beacon;
+        omnetpp::SimTime receptionTimestamp;
+        inet::Coord realPosition;
+    };
 
   private:
     void initialize (int stage) override;
+
+    void finish() override;
 
     void handleMessage (omnetpp::cMessage* message) override;
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
     omnetpp::SimTime beaconReceptionTimestamp {0};
-    std::vector<BeaconPair> beaconPairs;
+    std::vector<ReceivedBeacon> receivedBeacons;
 };
 
 }; // namespace ipin2017

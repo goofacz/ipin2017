@@ -39,29 +39,29 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/RangingApplication.o \
-    $O/RangingHost.o \
-    $O/TDoAMobileRangingApplication.o \
-    $O/BackhaulMessage.o \
-    $O/MobileRangingApplication.o \
     $O/HelperAnchorRangingApplication.o \
-    $O/TDoAAnchorRangingApplication.o \
+    $O/RangingApplication.o \
     $O/MasterAnchorRangingApplication.o \
-    $O/Frame_m.o \
-    $O/BeaconFrame_m.o \
+    $O/RangingHost.o \
+    $O/MobileRangingApplication.o \
+    $O/TDoAMobileRangingApplication.o \
+    $O/TDoAAnchorRangingApplication.o \
+    $O/BackhaulMessage.o \
+    $O/RangingReplyFrame_m.o \
     $O/TDoAAnchorSelfMessage_m.o \
+    $O/BeaconFrame_m.o \
     $O/BackhaulMessage_m.o \
-    $O/MasterAnchorSelfMessage_m.o \
-    $O/RangingReplyFrame_m.o
+    $O/Frame_m.o \
+    $O/MasterAnchorSelfMessage_m.o
 
 # Message files
 MSGFILES = \
-    Frame.msg \
-    BeaconFrame.msg \
+    RangingReplyFrame.msg \
     TDoAAnchorSelfMessage.msg \
+    BeaconFrame.msg \
     BackhaulMessage.msg \
-    MasterAnchorSelfMessage.msg \
-    RangingReplyFrame.msg
+    Frame.msg \
+    MasterAnchorSelfMessage.msg
 
 # SM files
 SMFILES =
@@ -179,6 +179,12 @@ $O/BackhaulMessage_m.o: BackhaulMessage_m.cc \
 	BackhaulMessage_m.h \
 	Frame_m.h
 $O/BeaconFrame_m.o: BeaconFrame_m.cc \
+	$(INET_PROJ)/src/inet/common/Compat.h \
+	$(INET_PROJ)/src/inet/common/INETDefs.h \
+	$(INET_PROJ)/src/inet/common/INETMath.h \
+	$(INET_PROJ)/src/inet/common/InitStages.h \
+	$(INET_PROJ)/src/inet/common/geometry/common/Coord.h \
+	$(INET_PROJ)/src/inet/features.h \
 	BeaconFrame_m.h \
 	Frame_m.h
 $O/Frame_m.o: Frame_m.cc \
