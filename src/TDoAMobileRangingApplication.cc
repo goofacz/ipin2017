@@ -32,22 +32,15 @@ TDoAMobileRangingApplication::initialize(int stage)
 void
 TDoAMobileRangingApplication::handleMessage (cMessage* message)
 {
-    // TODO
-
-    delete message;
-}
-
-void
-TDoAMobileRangingApplication::handleFrame (BeaconFrame* beaconFrame)
-{
-    // TODO
+    const auto frame = check_and_cast<BeaconFrame*> (message);
+    beaconPairs.emplace_back (frame, beaconReceptionTimestamp);
 }
 
 void
 TDoAMobileRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
 {
     if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
-        // TODO
+        beaconReceptionTimestamp = simTime ();
     }
 }
 

@@ -38,6 +38,16 @@ TDoAAnchorRangingApplication::initialize(int stage)
         assert (echoBeaconDelayParamater.getType () == cPar::LONG);
         echoBeaconDelay = SimTime {echoBeaconDelayParamater.longValue (), SIMTIME_US};
 
+        const auto& echoAnchorAddressParamater = par ("echoAnchorAddress");
+        assert (echoAnchorAddressParamater.getType () == cPar::STRING);
+        const auto macAddess = echoAnchorAddressParamater.stdstringValue ();
+        if (!macAddess.empty ()) {
+            echoAnchorAddress.setAddress (echoAnchorAddressParamater.stdstringValue ().c_str ());
+        }
+
+        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
+
         if (broadcastBeaconDelay > 0)
         {
             unique_ptr<TDoAAnchorSelfMessage> message {new TDoAAnchorSelfMessage {}};
@@ -71,13 +81,31 @@ TDoAAnchorRangingApplication::handleMessage (cMessage* message)
 void
 TDoAAnchorRangingApplication::handlFrame (BeaconFrame* frame)
 {
-    sendBeaconFrame (echoBeaconDelay);
+    const auto packetControlInformation = check_and_cast<const Ieee802Ctrl*> (frame->getControlInfo ());
+    const auto sourceAddress = packetControlInformation->getSourceAddress ();
+
+    if (sourceAddress == echoAnchorAddress)
+    {
+        // Compute delay
+        SimTime delay {echoBeaconDelay - (simTime () - beaconReceptionTimestamp)};
+        EV << delay << endl;
+        EV << echoBeaconDelay << endl;
+        EV << simTime () << endl;
+        EV << beaconReceptionTimestamp << endl;
+        EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
+
+        sendBeaconFrame (delay);
+    }
 }
 
 void
 TDoAAnchorRangingApplication::handleSelfMessage (TDoAAnchorSelfMessage* selfMessage)
 {
     sendBeaconFrame (0);
+
+    unique_ptr<TDoAAnchorSelfMessage> message {new TDoAAnchorSelfMessage {}};
+    message->setEventType (BROADCAST_BEACON);
+    scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
 }
 
 unsigned int
@@ -102,6 +130,14 @@ TDoAAnchorRangingApplication::sendBeaconFrame (const SimTime& delay)
     frame->setSequenceNumber (getNextPacketSequenceNumber ());
 
     sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (frame.release ()), delay);
+}
+
+void
+TDoAAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
+{
+    if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
+        beaconReceptionTimestamp = simTime ();
+    }
 }
 
 }; // namespace ipin2017

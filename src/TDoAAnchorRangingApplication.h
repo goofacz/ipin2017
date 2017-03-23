@@ -32,9 +32,13 @@ class TDoAAnchorRangingApplication :
 
     void sendBeaconFrame (const SimTime& delay);
 
+    void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
+
     unsigned int broadcastBeaconDelay {0};
+    inet::MACAddress echoAnchorAddress;
     omnetpp::SimTime echoBeaconDelay {0};
     unsigned int packetSequenceNumberGenerator {0};
+    omnetpp::SimTime beaconReceptionTimestamp {0};
 };
 
 }; // namespace ipin2017
