@@ -80,7 +80,6 @@ TDoAMobileRangingApplication::storeResults ()
     ofstream resultFile;
     resultFile.open (fileName.str (), ios_base::out | ios_base::app);
 
-    resultFile << "# beacon seq. no, beacon src addr, beacon reception timestamp (ps), anchor's X coord, anchor's Y coord, true mobile X coord, true mobile Y coord\n";
     for (const auto& entry : receivedBeacons)
     {
         const auto packetControlInformation = check_and_cast<const Ieee802Ctrl*> (entry.beacon->getControlInfo ());
