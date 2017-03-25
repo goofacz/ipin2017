@@ -33,6 +33,8 @@ class TDoAMobileRangingApplication :
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
+    void storeResults ();
+
     omnetpp::SimTime beaconReceptionTimestamp {0};
     std::vector<ReceivedBeacon> receivedBeacons;
 };
