@@ -15,10 +15,10 @@ positions = [];
 
 for seqNo = 1 : max(results(:,SEQ_NO))
     % Filter out beacons with the same sequence no.
-    roundResults = results(results(:,SEQ_NO) == 1, :);
+    roundResults = results(results(:,SEQ_NO) == seqNo, :);
     anchorTxDelays = zeros(size(roundResults,1),1);
     
-    if size(roundResults,1) < 3
+    if size(roundResults,1) < 4
         display('Too few beacons received in this round , skipping');
         continue
     end
