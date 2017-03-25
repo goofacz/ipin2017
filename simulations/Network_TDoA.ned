@@ -49,7 +49,7 @@ network Network_TDoA
         }
 
         Mobile1: MobileRangingHost {
-            @display("p=345,300");
+            @display("p=600,300");
             applicationType = "TDoAMobileRangingApplication";
             nic.mac.address = "DE-AD-BE-EF-00-01";
             nic.mac.promiscuous = true;
