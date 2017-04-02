@@ -36,18 +36,20 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 
     syms x y;
 
-% Less error-accumulating algorithm, where TDoA is applied to pairs of
-% anchors: [anchor i-1; anchor i] etc.
-    eq21 = abs((roundResults(2,RX_TS) - roundResults(1,RX_TS) - sum(anchorTxDelays(2)))  * C) == ...
-           abs(((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5 - ...
-               ((x - roundResults(1,ANCH_X_COORD))^2 + (y - roundResults(1,ANCH_Y_COORD))^2)^0.5);
-    eq32 = abs((roundResults(3,RX_TS) - roundResults(2,RX_TS) - sum(anchorTxDelays(3)))  * C) == ...
-           abs(((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5 - ...
-               ((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5);
-    eq43 = abs((roundResults(4,RX_TS) - roundResults(3,RX_TS) - sum(anchorTxDelays(4))) * C) == ...
-           abs(((x - roundResults(4,ANCH_X_COORD))^2 + (y - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
-               ((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5);
-
+    %
+    % Less error-accumulating algorithm, where TDoA is applied to pairs of anchors: [anchor i-1; anchor i] etc.
+    %
+    
+    eq21 = (((roundResults(2,RX_TS) - roundResults(1,RX_TS))) - sum(anchorTxDelays(2)))  * C == ...
+           ((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5 - ...
+            ((x - roundResults(1,ANCH_X_COORD))^2 + (y - roundResults(1,ANCH_Y_COORD))^2)^0.5;
+    eq32 = ((((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3)))  * C) == ...
+           (((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5 - ...
+            ((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5);
+    eq43 = ((((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C) == ...
+           (((x - roundResults(4,ANCH_X_COORD))^2 + (y - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
+            ((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5);
+    
     positionSolver = @(position) ...
         [
          % Partial TDoA for Mobile and <Anchor1, Anchor2>
@@ -66,9 +68,11 @@ for seqNo = 1 : max(results(:,SEQ_NO))
               ((position(1) - roundResults(3,ANCH_X_COORD))^2 + (position(2) - roundResults(3,ANCH_Y_COORD))^2)^0.5) ...
         ];
    
-    %fsolve(positionSolver, [400 350])
+    result = fsolve(positionSolver, [400 350]);
     
-% "Normal" TDoA, where all differences are computed against "master" anchor
+    %
+    % "Normal" TDoA, where all differences are computed against "master" anchor
+    %
 
 %     eq21 = (roundResults(2,RX_TS) - roundResults(1,RX_TS) - sum(anchorTxDelays(2))) * C == ...
 %            ((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5 - ...
@@ -81,11 +85,36 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 %      eq43 = (roundResults(4,RX_TS) - roundResults(1,RX_TS) - sum(anchorTxDelays(2:4))) * C== ...
 %            ((x - roundResults(4,ANCH_X_COORD))^2 + (y - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
 %            ((x - roundResults(1,ANCH_X_COORD))^2 + (y - roundResults(1,ANCH_Y_COORD))^2)^0.5;
+    
+%    position = solve([eq21 eq32 eq43], [x y])
+%    positions = [positions; vpa(position.x) vpa(position.y)];
+    
+    %
+    % Analytic solution
+    %    
 
-    % TODO solve() fails to handle three equations at once, but it gives
-    % correct result for any pair of eq21, eq32 and eq43 equations.
+    % Anchors 1 and 3 against anchor 2
+    coordinates123 = [roundResults(2,ANCH_X_COORD), roundResults(2,ANCH_Y_COORD);
+                      roundResults(1,ANCH_X_COORD), roundResults(1,ANCH_Y_COORD);
+                      roundResults(3,ANCH_X_COORD), roundResults(3,ANCH_Y_COORD)];
 
-    position = solve([eq21 eq32 eq43], [x y])
-    positions = [positions; vpa(position.x) vpa(position.y)];
+    timestamps123 = [NaN, ...
+                     ((((roundResults(2,RX_TS) - roundResults(1,RX_TS))) - sum(anchorTxDelays(2))) * C), ...
+                     ((((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C)];
+
+    position123 = tdoa_analytical(coordinates123, timestamps123);
+    
+    % Anchors 2 and 4 against anchor 3
+    coordinates234 = [roundResults(3,ANCH_X_COORD), roundResults(3,ANCH_Y_COORD);
+                      roundResults(2,ANCH_X_COORD), roundResults(2,ANCH_Y_COORD);
+                      roundResults(4,ANCH_X_COORD), roundResults(4,ANCH_Y_COORD)];
+       
+    timestamps234 = [NaN, ...
+                     ((((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C), ...
+                     ((((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C)];
+
+    position234 = tdoa_analytical(coordinates234, timestamps234);
+    
+    positions = [positions; position123(1), position123(2)];
 end
 
