@@ -13,8 +13,11 @@ Yl = coordinates(2,2) - coordinates(1,2);
 Xr = coordinates(3,1) - coordinates(1,1);
 Yr = coordinates(3,2) - coordinates(1,2);
 
-A = -2 * [Xl Yl;Xr Yr];
-B = [2 * L L^2 - Xl^2 - Yl^2; 2 * R R^2 - Xr^2 - Yr^2];
+A = -2 * [Xl Yl; ...
+          Xr Yr];
+
+B = [-2 * L, L^2 - Xl^2 - Yl^2; ...
+      2 * R, R^2 - Xr^2 - Yr^2];
 
 tmp = A\B;
 
