@@ -17,9 +17,11 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <cassert>
+#include <exception>
+
 #include "HardwareClockClient.h"
 #include "HardwareClock.h"
-#include <exception>
 
 using namespace omnetpp;
 
@@ -33,10 +35,14 @@ HardwareClockClient::HardwareClockClient()
 
 void HardwareClockClient::scheduleAtHWtime(const simtime_t& time, cMessage* msg)
 {
-	if (NULL == _clock)
-		throw std::logic_error("HardwareClockClient::scheduleAtHWtime: no clock set");
-
+	assert (NULL != _clock);
 	_clock->scheduleAtHWtime(time, msg, this);
+}
+
+omnetpp::simtime_t HardwareClockClient::getHWtime () const
+{
+    assert (NULL != _clock);
+    return _clock->getHWtime();
 }
 
 void HardwareClockClient::scheduleAtInObject(const simtime_t realtime, cMessage* msg)
@@ -49,6 +55,7 @@ void HardwareClockClient::scheduleAtInObject(const simtime_t realtime, cMessage*
 
 void HardwareClockClient::setHardwareClock(HardwareClock* clock)
 {
+    assert (NULL == _clock);
 	_clock = clock;
 }
 

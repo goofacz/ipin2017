@@ -46,6 +46,7 @@ protected:
 	/// Sets the hardware clock to use in 'scheduleAtHWtime()'.
 	void setHardwareClock(HardwareClock* clock);
 
+public:
 	/// Schedules a message at hardware time.
 	///
 	/// The hardware clock whose time is used has to be set with
@@ -58,7 +59,8 @@ protected:
 	/// \param msg	The message to schedule.
 	void scheduleAtHWtime(const omnetpp::simtime_t& hwtime, omnetpp::cMessage* msg);
 
-public:
+	omnetpp::simtime_t getHWtime () const;
+
 	HardwareClockClient();
 
 	// needs access to 'scheduleAtInObject'
