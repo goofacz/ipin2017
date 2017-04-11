@@ -37,6 +37,8 @@ module RangingHost extends MobileHost
 
         nic: IdealWirelessNic;
 
+        clock : ConstantDrift;
+
     connections:
         radioIn --> nic.radioIn;
 }
