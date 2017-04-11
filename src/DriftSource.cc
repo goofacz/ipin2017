@@ -21,6 +21,9 @@
 
 using namespace omnetpp;
 
+namespace ipin2017
+{
+
 Driftsource::~Driftsource()
 {
 }
@@ -80,3 +83,5 @@ double BoundedDriftVariation::next()
 	last_drift = drift;
 	return drift;
 }
+
+} // namespace ipin2017

@@ -26,6 +26,9 @@
 
 using namespace omnetpp;
 
+namespace ipin2017
+{
+
 Define_Module(HardwareClock);
 
 HardwareClock::Properties::Properties()
@@ -279,3 +282,5 @@ HardwareClock* HardwareClock::findFirstClock(const cModule* parent)
 
 	return clocks[0];
 }
+
+} // namespace ipin2017

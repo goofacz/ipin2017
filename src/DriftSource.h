@@ -22,6 +22,9 @@
 
 #include <omnetpp.h>
 
+namespace ipin2017
+{
+
 /// Abstract base class for drift value sources.
 class Driftsource
 {
@@ -92,5 +95,7 @@ public:
 	/// \param tint	Simulation time between two drift values.
 	BoundedDriftVariation(const omnetpp::cPar& distribution, double max_drift_variation, double start_value,  const omnetpp::simtime_t& tint);
 };
+
+} // namespace ipin2017
 
 #endif

@@ -23,6 +23,9 @@
 //#include "hardwareclock.h"
 #include <omnetpp.h>
 
+namespace ipin2017
+{
+
 class HardwareClock;
 
 /// \brief Base class for classes that want to schedule events at hardware time.
@@ -61,5 +64,7 @@ public:
 	// needs access to 'scheduleAtInObject'
 	friend class HardwareClock;
 };
+
+} // namespace ipin2017
 
 #endif

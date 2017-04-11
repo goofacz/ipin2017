@@ -23,6 +23,9 @@
 
 using namespace omnetpp;
 
+namespace ipin2017
+{
+
 HardwareClockClient::HardwareClockClient()
 	: _clock(NULL)
 {
@@ -48,3 +51,5 @@ void HardwareClockClient::setHardwareClock(HardwareClock* clock)
 {
 	_clock = clock;
 }
+
+} // namespace ipin2017

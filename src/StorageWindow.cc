@@ -23,6 +23,9 @@
 
 using namespace omnetpp;
 
+namespace ipin2017
+{
+
 StorageWindow::StorageWindow(const HardwareClock::Properties& properties, Driftsource* source)
 	: properties(properties)
 	, source(source)
@@ -106,3 +109,5 @@ size_t StorageWindow::indexOf(const simtime_t& t) const
 {
 	return (t - data[0].realTime) / properties.tint();
 }
+
+} // namespace ipin2017

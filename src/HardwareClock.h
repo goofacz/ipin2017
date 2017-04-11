@@ -23,6 +23,9 @@
 #include <omnetpp.h>
 #include <queue>
 
+namespace ipin2017
+{
+
 class HardwareClockClient;
 class StorageWindow;
 
@@ -170,5 +173,7 @@ public:
 	// needs access to 'scheduleAtHWtime'
 	friend class HardwareClockClient;
 };
+
+} // namespace ipin2017
 
 #endif

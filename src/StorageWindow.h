@@ -23,6 +23,9 @@
 #include <omnetpp.h>
 #include "HardwareClock.h"
 
+namespace ipin2017
+{
+
 class Driftsource;
 
 /// Saves the data points for the continuous linear approximation of the drift function.
@@ -121,5 +124,7 @@ public:
 	/// \returns	The index of the hold point in what the simulation time lies.
 	size_t indexOf(const omnetpp::simtime_t& t) const;
 };
+
+} // namespace ipin2017
 
 #endif
