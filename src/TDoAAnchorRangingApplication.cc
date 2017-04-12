@@ -52,9 +52,8 @@ TDoAAnchorRangingApplication::initialize(int stage)
 
         if (broadcastBeaconDelay > 0)
         {
-            unique_ptr<TDoAAnchorSelfMessage> message {new TDoAAnchorSelfMessage {}};
-            message->setEventType (BROADCAST_BEACON);
-            scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
+            unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+            scheduleSelfMessage (move (message), SimTime {broadcastBeaconDelay, SIMTIME_MS});
         }
     }
 }
@@ -70,7 +69,7 @@ TDoAAnchorRangingApplication::handleMessage (cMessage* message)
 {
     if (message->isSelfMessage ())
     {
-        handleSelfMessage (check_and_cast<TDoAAnchorSelfMessage*> (message));
+        handleSelfMessage (check_and_cast<TDoAAnchorSendBeaconMessage*> (message));
     }
     else
     {
@@ -89,21 +88,24 @@ TDoAAnchorRangingApplication::handlFrame (BeaconFrame* frame)
     if (sourceAddress == echoAnchorAddress)
     {
         // Compute delay
-        SimTime delay {echoBeaconDelay - (simTime () - beaconReceptionTimestamp)};
+        SimTime delay {echoBeaconDelay - (getHWtime () - beaconReceptionTimestamp)};
         EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
 
-        sendBeaconFrame (delay);
+        unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+        scheduleSelfMessage (move (message), delay);
     }
 }
 
 void
-TDoAAnchorRangingApplication::handleSelfMessage (TDoAAnchorSelfMessage* selfMessage)
+TDoAAnchorRangingApplication::handleSelfMessage (TDoAAnchorSendBeaconMessage* selfMessage)
 {
-    sendBeaconFrame (0);
+    sendBeaconFrame ();
 
-    unique_ptr<TDoAAnchorSelfMessage> message {new TDoAAnchorSelfMessage {}};
-    message->setEventType (BROADCAST_BEACON);
-    scheduleSelfMessage (move (message), broadcastBeaconDelay, SIMTIME_MS);
+    if (broadcastBeaconDelay > 0)
+    {
+        unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+        scheduleSelfMessage (move (message), SimTime {broadcastBeaconDelay, SIMTIME_MS});
+    }
 }
 
 unsigned int
@@ -119,7 +121,7 @@ TDoAAnchorRangingApplication::getNextPacketSequenceNumber ()
 }
 
 void
-TDoAAnchorRangingApplication::sendBeaconFrame (const SimTime& delay)
+TDoAAnchorRangingApplication::sendBeaconFrame ()
 {
     const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
 
@@ -130,14 +132,14 @@ TDoAAnchorRangingApplication::sendBeaconFrame (const SimTime& delay)
     frame->setSequenceNumber (getNextPacketSequenceNumber ());
     frame->setPosition (rangingHost->getCurrentPosition ());
 
-    sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (frame.release ()), delay);
+    sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (frame.release ()), 0);
 }
 
 void
 TDoAAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
 {
     if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
-        beaconReceptionTimestamp = simTime ();
+        beaconReceptionTimestamp = getHWtime ();
     }
 }
 

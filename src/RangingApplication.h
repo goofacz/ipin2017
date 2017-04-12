@@ -22,8 +22,7 @@ class RangingApplication :
                         const omnetpp::SimTime& delay = omnetpp::SimTime {0, omnetpp::SIMTIME_MS});
 
         void scheduleSelfMessage (std::unique_ptr<omnetpp::cMessage> message,
-                                  unsigned int delay,
-                                  omnetpp::SimTimeUnit delay_unit);
+                                  const omnetpp::SimTime& delay);
 
     private:
         int numInitStages () const override;

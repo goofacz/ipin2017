@@ -52,7 +52,7 @@ void
 TDoAMobileRangingApplication::onRxStateChangedCallback (IRadio::ReceptionState state)
 {
     if (state == IRadio::RECEPTION_STATE_RECEIVING)    {
-        beaconReceptionTimestamp = simTime ();
+        beaconReceptionTimestamp = getHWtime ();
     }
 }
 

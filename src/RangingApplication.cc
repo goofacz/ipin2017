@@ -45,11 +45,10 @@ RangingApplication::sendFrame (const inet::MACAddress& destinationAddress,
 
 void
 RangingApplication::scheduleSelfMessage (unique_ptr<cMessage> message,
-                                         unsigned int delay,
-                                         SimTimeUnit delay_unit)
+                                         const SimTime& delay)
 {
-    const auto timestamp = simTime () + SimTime {delay, delay_unit};
-    scheduleAt (timestamp, message.release ());
+    const auto timestamp = getHWtime () + delay;
+    scheduleAtHWtime (timestamp, message.release ());
 }
 
 int

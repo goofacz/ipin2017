@@ -5,7 +5,7 @@
 #include <IRadio.h>
 
 #include "RangingApplication.h"
-#include "TDoAAnchorSelfMessage_m.h"
+#include "TDoAAnchorSendBeaconMessage_m.h"
 #include "Ranging.h"
 #include "BeaconFrame_m.h"
 
@@ -24,13 +24,13 @@ class TDoAAnchorRangingApplication :
 
     void handlFrame (BeaconFrame* frame);
 
-    void handleSelfMessage (TDoAAnchorSelfMessage* selfMessage);
+    void handleSelfMessage (TDoAAnchorSendBeaconMessage* selfMessage);
 
     unsigned int getCurrentPacketSequenceNumber () const;
 
     unsigned int getNextPacketSequenceNumber ();
 
-    void sendBeaconFrame (const SimTime& delay);
+    void sendBeaconFrame ();
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
