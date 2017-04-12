@@ -27,6 +27,8 @@ module RangingHost extends MobileHost
         @networkNode();
         *.interfaceTableModule = default(absPath(".interfaceTable"));
 
+        string clockType = default("");
+
     gates:
         input radioIn @directIn;
 
@@ -37,7 +39,7 @@ module RangingHost extends MobileHost
 
         nic: IdealWirelessNic;
 
-        clock : ConstantDrift;
+        clock : <clockType> like IHardwareClock;
 
     connections:
         radioIn --> nic.radioIn;
