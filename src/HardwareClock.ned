@@ -31,6 +31,12 @@ simple HardwareClock {
         @display("i=device/clock");
 }
 
+simple NoneDrift extends HardwareClock like IHardwareClock {
+    parameters:
+        interval = 1s;
+        double constant_drift = 0;
+}
+
 simple ConstantDrift extends HardwareClock like IHardwareClock {
     parameters:
         interval = 1s;
