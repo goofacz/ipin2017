@@ -18,7 +18,7 @@ for seqNo = 1 : max(results(:,SEQ_NO))
     roundResults = results(results(:,SEQ_NO) == seqNo, :);
     anchorTxDelays = zeros(size(roundResults,1),1);
     
-    if size(roundResults,1) < 4
+    if size(roundResults,1) < 3
         display('Too few beacons received in this round , skipping');
         continue
     end
@@ -46,9 +46,9 @@ for seqNo = 1 : max(results(:,SEQ_NO))
     eq32 = ((((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3)))  * C) == ...
            (((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5 - ...
             ((x - roundResults(2,ANCH_X_COORD))^2 + (y - roundResults(2,ANCH_Y_COORD))^2)^0.5);
-    eq43 = ((((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C) == ...
-           (((x - roundResults(4,ANCH_X_COORD))^2 + (y - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
-            ((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5);
+%     eq43 = ((((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C) == ...
+%            (((x - roundResults(4,ANCH_X_COORD))^2 + (y - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
+%             ((x - roundResults(3,ANCH_X_COORD))^2 + (y - roundResults(3,ANCH_Y_COORD))^2)^0.5);
     
     positionSolver = @(position) ...
         [
@@ -63,12 +63,12 @@ for seqNo = 1 : max(results(:,SEQ_NO))
                 ((position(1) - roundResults(2,ANCH_X_COORD))^2 + (position(2) - roundResults(2,ANCH_Y_COORD))^2)^0.5, 2); ...
 
          % Partial TDoA for Mobile and <Anchor3, Anchor4>
-         -power((roundResults(4,RX_TS) - roundResults(3,RX_TS) - sum(anchorTxDelays(4))) * C, 2) + ...
-          power(((position(1) - roundResults(4,ANCH_X_COORD))^2 + (position(2) - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
-                ((position(1) - roundResults(3,ANCH_X_COORD))^2 + (position(2) - roundResults(3,ANCH_Y_COORD))^2)^0.5, 2) ...
+%          -power((roundResults(4,RX_TS) - roundResults(3,RX_TS) - sum(anchorTxDelays(4))) * C, 2) + ...
+%           power(((position(1) - roundResults(4,ANCH_X_COORD))^2 + (position(2) - roundResults(4,ANCH_Y_COORD))^2)^0.5 - ...
+%                 ((position(1) - roundResults(3,ANCH_X_COORD))^2 + (position(2) - roundResults(3,ANCH_Y_COORD))^2)^0.5, 2) ...
         ];
    
-    result = fsolve(positionSolver, [550 350]);
+%     result = fsolve(positionSolver, [550 350]);
     
     %
     % "Normal" TDoA, where all differences are computed against "master" anchor
@@ -105,15 +105,15 @@ for seqNo = 1 : max(results(:,SEQ_NO))
     position123 = tdoa_analytical(coordinates123, timestamps123);
     
     % Anchors 2 and 4 against anchor 3
-    coordinates234 = [roundResults(3,ANCH_X_COORD), roundResults(3,ANCH_Y_COORD);
-                      roundResults(2,ANCH_X_COORD), roundResults(2,ANCH_Y_COORD);
-                      roundResults(4,ANCH_X_COORD), roundResults(4,ANCH_Y_COORD)];
-       
-    timestamps234 = [NaN, ...
-                     (((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C, ...
-                     (((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C];
-
-    position234 = tdoa_analytical(coordinates234, timestamps234);
+%     coordinates234 = [roundResults(3,ANCH_X_COORD), roundResults(3,ANCH_Y_COORD);
+%                       roundResults(2,ANCH_X_COORD), roundResults(2,ANCH_Y_COORD);
+%                       roundResults(4,ANCH_X_COORD), roundResults(4,ANCH_Y_COORD)];
+%        
+%     timestamps234 = [NaN, ...
+%                      (((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C, ...
+%                      (((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C];
+% 
+%     position234 = tdoa_analytical(coordinates234, timestamps234);
     
     positions = [positions; position123(1), position123(2)];
 end
