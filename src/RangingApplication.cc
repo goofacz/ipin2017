@@ -5,6 +5,7 @@
 
 #include "RangingApplication.h"
 #include "RangingHost.h"
+#include "HardwareClock.h"
 #include "Frame_m.h"
 
 using namespace omnetpp;
@@ -24,7 +25,7 @@ RangingApplication::initialize (int stage)
 
     if (stage == INITSTAGE_APPLICATION_LAYER)
     {
-        // ...
+        setHardwareClock(HardwareClock::findFirstClock(getParentModule()));
     }
 }
 

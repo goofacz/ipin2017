@@ -266,7 +266,7 @@ std::vector<HardwareClock*> HardwareClock::findClocks(const cModule* parent)
 	for (cModule::SubmoduleIterator i(parent); !i.end(); i++) {
 		cModule* child = *i;
 
-		if (0 == strcmp("HardwareClock", child->getClassName()))
+		if (0 == strcmp("ipin2017::HardwareClock", child->getClassName()))
 			result.push_back(check_and_cast<HardwareClock*>(child));
 	}
 

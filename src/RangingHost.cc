@@ -4,6 +4,7 @@
 #include <Radio.h>
 
 #include "RangingHost.h"
+#include "HardwareClock.h"
 
 using namespace omnetpp;
 using namespace inet;
@@ -80,6 +81,9 @@ RangingHost::initialize (int stage)
 
         auto iMobility = check_and_cast<IMobility*> (mobility);
         currentPosition = iMobility->getCurrentPosition ();
+
+        auto clock = check_and_cast<HardwareClock*> (getModuleByPath(".clock"));
+        setHardwareClock(clock);
     }
 }
 

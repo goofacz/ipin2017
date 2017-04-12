@@ -8,12 +8,13 @@
 #include <IRadio.h>
 
 #include "Listener.h"
+#include "HardwareClockClient.h"
 
 namespace ipin2017
 {
 
 class RangingHost :
-    public omnetpp::cSimpleModule
+    public HardwareClockClient
 {
     public:
         using TxStateChangedCallback = std::function<void(inet::physicallayer::IRadio::TransmissionState)>;

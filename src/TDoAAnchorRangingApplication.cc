@@ -4,14 +4,16 @@
 #include <fstream>
 
 #include <INETDefs.h>
-#include <TDoAAnchorRangingApplication.h>
 #include <MACAddress.h>
 #include <IdealMacFrame_m.h>
 #include <Ieee802Ctrl.h>
 
+#include "TDoAAnchorRangingApplication.h"
 #include "RangingHost.h"
 #include "Utilities.h"
 #include "RangingHost.h"
+#include "HardwareClockClient.h"
+#include "HardwareClock.h"
 
 using namespace inet;
 using namespace inet::physicallayer;
@@ -45,7 +47,7 @@ TDoAAnchorRangingApplication::initialize(int stage)
             echoAnchorAddress.setAddress (echoAnchorAddressParamater.stdstringValue ().c_str ());
         }
 
-        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
         rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
 
         if (broadcastBeaconDelay > 0)

@@ -6,12 +6,13 @@
 #include <MACAddress.h>
 
 #include "Frame_m.h"
+#include "HardwareClockClient.h"
 
 namespace ipin2017
 {
 
 class RangingApplication :
-    public omnetpp::cSimpleModule
+    public HardwareClockClient
 {
     protected:
         void initialize (int stage) override;
