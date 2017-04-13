@@ -31,7 +31,7 @@ network Network_TDoA
         }
         
         Anchor2: TDoAAnchorRangingHost {
-            @display("p=500,150");
+            @display("p=500,50");
             nic.mac.address = "DE-AD-BE-EF-10-02";
             application.echoAnchorAddress = "DE-AD-BE-EF-10-01";
         }
