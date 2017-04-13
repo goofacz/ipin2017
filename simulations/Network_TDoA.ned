@@ -27,7 +27,7 @@ network Network_TDoA
         Anchor1: TDoAAnchorRangingHost {
             @display("p=300,150");
             nic.mac.address = "DE-AD-BE-EF-10-01";
-            application.broadcastBeaconDelay = 5s;
+            application.broadcastBeaconDelay = 1s;
         }
         
         Anchor2: TDoAAnchorRangingHost {
