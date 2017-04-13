@@ -34,7 +34,7 @@ class TDoAAnchorRangingApplication :
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
 
-    unsigned int broadcastBeaconDelay {0};
+    omnetpp::SimTime broadcastBeaconDelay {0};
     inet::MACAddress echoAnchorAddress;
     omnetpp::SimTime echoBeaconDelay {0};
     unsigned int packetSequenceNumberGenerator {0};

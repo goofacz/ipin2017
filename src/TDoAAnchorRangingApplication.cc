@@ -34,11 +34,11 @@ TDoAAnchorRangingApplication::initialize(int stage)
     {
         const auto& broadcastBeaconDelayParamater = par ("broadcastBeaconDelay");
         assert (broadcastBeaconDelayParamater.getType () == cPar::LONG);
-        broadcastBeaconDelay = broadcastBeaconDelayParamater.longValue ();
+        broadcastBeaconDelay = SimTime {broadcastBeaconDelayParamater.longValue (), SIMTIME_PS};
 
         const auto& echoBeaconDelayParamater = par ("echoBeaconDelay");
         assert (echoBeaconDelayParamater.getType () == cPar::LONG);
-        echoBeaconDelay = SimTime {echoBeaconDelayParamater.longValue (), SIMTIME_US};
+        echoBeaconDelay = SimTime {echoBeaconDelayParamater.longValue (), SIMTIME_PS};
 
         const auto& echoAnchorAddressParamater = par ("echoAnchorAddress");
         assert (echoAnchorAddressParamater.getType () == cPar::STRING);
@@ -53,7 +53,7 @@ TDoAAnchorRangingApplication::initialize(int stage)
         if (broadcastBeaconDelay > 0)
         {
             unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
-            scheduleSelfMessage (move (message), SimTime {broadcastBeaconDelay, SIMTIME_MS});
+            scheduleSelfMessage (move (message), broadcastBeaconDelay);
         }
     }
 }
@@ -104,7 +104,7 @@ TDoAAnchorRangingApplication::handleSelfMessage (TDoAAnchorSendBeaconMessage* se
     if (broadcastBeaconDelay > 0)
     {
         unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
-        scheduleSelfMessage (move (message), SimTime {broadcastBeaconDelay, SIMTIME_MS});
+        scheduleSelfMessage (move (message), broadcastBeaconDelay);
     }
 }
 

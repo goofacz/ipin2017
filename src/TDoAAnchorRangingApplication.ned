@@ -4,7 +4,7 @@ simple TDoAAnchorRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(TDoAAnchorRangingApplication);
-	    int broadcastBeaconDelay @unit(ms) = default(0s);
-	    int echoBeaconDelay @unit(us) = default(1ms);
+	    int broadcastBeaconDelay @unit(ps) = default(0s);
+	    int echoBeaconDelay @unit(ps) = default(1ms);
 	    string echoAnchorAddress = default("");
 }
