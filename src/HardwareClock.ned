@@ -40,7 +40,7 @@ simple NoneDrift extends HardwareClock like IHardwareClock {
 simple ConstantDrift extends HardwareClock like IHardwareClock {
     parameters:
         interval = 1s;
-        double constant_drift = default(50e-6);
+        double constant_drift = default(10e-6);
 }
 
 simple BoundedDrift extends HardwareClock like IHardwareClock {
