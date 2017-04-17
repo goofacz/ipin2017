@@ -52,7 +52,7 @@ TDoAAnchorRangingApplication::initialize(int stage)
 
         if (broadcastBeaconDelay > 0)
         {
-            unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+            unique_ptr<cMessage> message {new cMessage {"sendNextBeacon"}};
             scheduleSelfMessage (move (message), broadcastBeaconDelay);
         }
     }
@@ -67,16 +67,16 @@ TDoAAnchorRangingApplication::finish ()
 void
 TDoAAnchorRangingApplication::handleMessage (cMessage* message)
 {
+    unique_ptr<cMessage> messageHandler {message};
+
     if (message->isSelfMessage ())
     {
-        handleSelfMessage (check_and_cast<TDoAAnchorSendBeaconMessage*> (message));
+        handleSelfMessage ();
     }
     else
     {
         handlFrame (check_and_cast<BeaconFrame*> (message));
     }
-
-    delete message;
 }
 
 void
@@ -91,19 +91,19 @@ TDoAAnchorRangingApplication::handlFrame (BeaconFrame* frame)
         SimTime delay {echoBeaconDelay - (getHWtime () - beaconReceptionTimestamp)};
         EXPECT (delay > 0, "Cannot send MAC packet with negative delay");
 
-        unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+        unique_ptr<cMessage> message {new cMessage {"sendBeaconMessage"}};
         scheduleSelfMessage (move (message), delay);
     }
 }
 
 void
-TDoAAnchorRangingApplication::handleSelfMessage (TDoAAnchorSendBeaconMessage* selfMessage)
+TDoAAnchorRangingApplication::handleSelfMessage ()
 {
     sendBeaconFrame ();
 
     if (broadcastBeaconDelay > 0)
     {
-        unique_ptr<TDoAAnchorSendBeaconMessage> message {new TDoAAnchorSendBeaconMessage {}};
+        unique_ptr<cMessage> message {new cMessage {"sendBeaconMessage"}};
         scheduleSelfMessage (move (message), broadcastBeaconDelay);
     }
 }

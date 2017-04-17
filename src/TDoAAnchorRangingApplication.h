@@ -5,7 +5,6 @@
 #include <IRadio.h>
 
 #include "RangingApplication.h"
-#include "TDoAAnchorSendBeaconMessage_m.h"
 #include "BeaconFrame_m.h"
 
 namespace ipin2017
@@ -23,7 +22,7 @@ class TDoAAnchorRangingApplication :
 
     void handlFrame (BeaconFrame* frame);
 
-    void handleSelfMessage (TDoAAnchorSendBeaconMessage* selfMessage);
+    void handleSelfMessage ();
 
     unsigned int getCurrentPacketSequenceNumber () const;
 
