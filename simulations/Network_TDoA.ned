@@ -24,20 +24,19 @@ network Network_TDoA
         }
         
         Anchor1: RangingHost {
-            @display("p=300,150");
+            @display("p=300,150;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-01";
-            
         }
         
         Anchor2: RangingHost {
-            @display("p=500,50");
+            @display("p=500,50;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-02";
         }
 
         Anchor3: RangingHost {
-            @display("p=400,300");
+            @display("p=400,300;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-03";
         }
