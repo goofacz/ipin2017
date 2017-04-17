@@ -1,3 +1,5 @@
+function hardwareClockTest()
+
 data = load('../simulations/clock_test_results');
 
 figure;
