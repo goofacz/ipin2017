@@ -1,7 +1,6 @@
 package ipin2017.simulations;
 
-import ipin2017.TDoAAnchorRangingHost;
-import ipin2017.MobileRangingHost;
+import ipin2017.RangingHost;
 import inet.networklayer.configurator.generic.GenericNetworkConfigurator;
 import inet.physicallayer.idealradio.IdealRadioMedium;
 import inet.visualizer.integrated.IntegratedCanvasVisualizer;
@@ -24,27 +23,28 @@ network Network_TDoA
             @display("p=44,26");
         }
         
-        Anchor1: TDoAAnchorRangingHost {
+        Anchor1: RangingHost {
             @display("p=300,150");
+            mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-01";
-            application.broadcastBeaconDelay = 1s;
+            
         }
         
-        Anchor2: TDoAAnchorRangingHost {
+        Anchor2: RangingHost {
             @display("p=500,50");
+            mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-02";
-            application.echoAnchorAddress = "DE-AD-BE-EF-10-01";
         }
 
-        Anchor3: TDoAAnchorRangingHost {
+        Anchor3: RangingHost {
             @display("p=400,300");
+            mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-03";
-            application.echoAnchorAddress = "DE-AD-BE-EF-10-02";
         }
 
-        Mobile1: MobileRangingHost {
+        Mobile1: RangingHost {
             @display("p=600,250");
-            applicationType = "TDoAMobileRangingApplication";
+            mobilityType = "LinearMobility";
             nic.mac.address = "DE-AD-BE-EF-00-01";
             nic.mac.promiscuous = true;
         }
