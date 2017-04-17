@@ -19,5 +19,5 @@ simple TDoAMobileRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(TDoAMobileRangingApplication);
-	    int broadcastReplyDelay @unit(us) = default(1000us);
+	    int broadcastReplyDelay @unit(us) = default(1ms);
 }

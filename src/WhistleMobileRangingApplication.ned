@@ -15,8 +15,9 @@
 
 package ipin2017;
 
-simple WhistleNonBaseAnchorRangingApplication extends RangingApplication
+simple WhistleMobileRangingApplication extends RangingApplication
 {
 	parameters:
-	    @class(WhistleNonBaseAnchorRangingApplication);
+	    @class(WhistleMobileRangingApplication);
+	    int frameTransmissionInterval @unit(ps) = default(1s);
 }
