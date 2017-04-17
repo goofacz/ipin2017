@@ -6,7 +6,6 @@
 
 #include "RangingApplication.h"
 #include "TDoAAnchorSendBeaconMessage_m.h"
-#include "Ranging.h"
 #include "BeaconFrame_m.h"
 
 namespace ipin2017
