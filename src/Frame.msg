@@ -4,6 +4,7 @@ enum FrameType
 {
     BEACON_FRAME = 1;
     RANGING_REPLY_FRAME = 2;
+    WHISTLE_FRAME = 3;
 }
 
 packet Frame 
