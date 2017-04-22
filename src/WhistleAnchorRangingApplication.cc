@@ -111,7 +111,7 @@ WhistleAnchorRangingApplication::handleMessage (const WhistleFrame* frame)
         assert (!scheduledEchoFrame);
         scheduledEchoFrame.reset (new WhistleFrame {});
         scheduledEchoFrame->setBitLength (10);
-        scheduledEchoFrame->setSequenceNumber (frame->getSequenceNumber () + 1);
+        scheduledEchoFrame->setSequenceNumber (frame->getSequenceNumber ());
         scheduledEchoFrame->setEchoFrame (true);
 
         unique_ptr<cMessage> sendEchoFrameMessage {new cMessage ("sendEchoFrameMessage")};
