@@ -16,17 +16,19 @@ class WhistleAnchorRangingApplication :
     public RangingApplication
 {
   private:
-    struct ReceivedFrame
+    struct RecordedFrame
     {
-        ReceivedFrame () = default;
+        RecordedFrame () = default;
 
-        ReceivedFrame (std::unique_ptr<const WhistleFrame> frame,
+        RecordedFrame (std::unique_ptr<const WhistleFrame> frame,
                        const omnetpp::SimTime& receptionTimestamp,
-                       const omnetpp::SimTime& transmissionTimestamp);
+                       const omnetpp::SimTime& transmissionTimestamp,
+                       inet::Coord position);
 
         std::unique_ptr<const WhistleFrame> frame {nullptr};
         omnetpp::SimTime receptionTimestamp {0};
         omnetpp::SimTime transmissionTimestamp {0};
+        inet::Coord position;
     };
 
   private:
@@ -45,7 +47,7 @@ class WhistleAnchorRangingApplication :
     bool isBaseAnchor {false};
     omnetpp::SimTime echoFrameDelay {0};
     omnetpp::SimTime frameReceptionTimestamp {0};
-    std::vector<ReceivedFrame> receivedFrames;
+    std::vector<RecordedFrame> recordedFrames;
     std::unique_ptr<WhistleFrame> scheduledEchoFrame;
 };
 

@@ -47,13 +47,15 @@ WhistleAnchorRangingApplication::finish ()
     ofstream resultFile;
     resultFile.open ("whistle_simulation_result", ios_base::out | ios_base::app);
 
-    for (const auto& entry : receivedFrames)
+    for (const auto& entry : recordedFrames)
     {
         resultFile << ranginghHst->getLocalAddress ().getInt () << ',';
         resultFile << entry.frame->getEchoFrame () << ',';
         resultFile << entry.frame->getSequenceNumber () << ',';
         resultFile << entry.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
-        resultFile << entry.transmissionTimestamp.inUnit (SIMTIME_PS) << '\n';
+        resultFile << entry.transmissionTimestamp.inUnit (SIMTIME_PS) << ',';
+        resultFile << entry.position.x << ',';
+        resultFile << entry.position.y << '\n';
     }
 
     resultFile.flush ();
@@ -95,7 +97,8 @@ void
 WhistleAnchorRangingApplication::handleSelfMessage (cMessage* message)
 {
     assert (scheduledEchoFrame);
-    receivedFrames.emplace_back (unique_ptr<const WhistleFrame> {scheduledEchoFrame->dup ()}, 0, getHWtime ());
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+    recordedFrames.emplace_back (unique_ptr<const WhistleFrame> {scheduledEchoFrame->dup ()}, getHWtime (), getHWtime (), rangingHost->getCurrentPosition ());
     sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (scheduledEchoFrame.release ()), 0);
 }
 
@@ -115,16 +118,19 @@ WhistleAnchorRangingApplication::handleMessage (const WhistleFrame* frame)
         scheduleAtHWtime (frameReceptionTimestamp + echoFrameDelay, sendEchoFrameMessage.release ());
     }
 
-    receivedFrames.emplace_back (unique_ptr<const WhistleFrame> (frame->dup ()), frameReceptionTimestamp, 0);
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+    recordedFrames.emplace_back (unique_ptr<const WhistleFrame> (frame->dup ()), frameReceptionTimestamp, 0, rangingHost->getCurrentPosition ());
     frameReceptionTimestamp = 0;
 }
 
-WhistleAnchorRangingApplication::ReceivedFrame::ReceivedFrame (unique_ptr<const WhistleFrame> frame,
+WhistleAnchorRangingApplication::RecordedFrame::RecordedFrame (unique_ptr<const WhistleFrame> frame,
                                                                const SimTime& receptionTimestamp,
-                                                               const SimTime& transmissionTimestamp) :
+                                                               const SimTime& transmissionTimestamp,
+                                                               Coord position) :
     frame {move (frame)},
     receptionTimestamp {receptionTimestamp},
-    transmissionTimestamp {transmissionTimestamp}
+    transmissionTimestamp {transmissionTimestamp},
+    position {move (position)}
 {
     // ...
 }
