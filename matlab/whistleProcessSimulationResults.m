@@ -6,11 +6,13 @@ IS_ECHO_FRAME = 2; % 1 - replied frame, 0 - original frame
 SEQ_NO = 3;
 RX_TS = 4;
 TX_TS = 5;
+COORD_X = 6;
+COORD_Y = 7;
 
 C = 0.000299792458; % m/ps
 DELAY = 1000000000; % ps
 
-baseAnchorAddr = hex2dec('DEADBEEF1001');
+baseAnchorAddr = hex2dec('DEADBEEF1001'); % Anchor 1
 
 results = csvread(filePath);
 positions = [];
@@ -24,17 +26,35 @@ for origSeqNoIdx = 1 : length(origSeqNums)
     origSeqNo = origSeqNums(origSeqNoIdx);
     origFramesIndices = results(:,SEQ_NO) == origSeqNo & results(:,IS_ECHO_FRAME) == 0;
     origFrames = results(origFramesIndices, :);
-    
-    echoSeqNo = origSeqNo + 1;
-    echoFramesIndices = results(:,SEQ_NO) == echoSeqNo & results(:,IS_ECHO_FRAME) == 1;
+
+    echoFramesIndices = results(:,SEQ_NO) == origSeqNo & results(:,IS_ECHO_FRAME) == 1;
     echoFrames = results(echoFramesIndices, :);
-    
+
     % Get base an nonbase anchors
     baseAnchIdx = origFrames(:, ANCHOR_ADDR) == baseAnchorAddr;
+
     baseAnchOrigFrame = origFrames(baseAnchIdx, :);
     nonbaseAnchOrigFrame = origFrames(~baseAnchIdx, :);
     baseAnchEchoFrame = echoFrames(baseAnchIdx, :);
     nonbaseAnchEchoFrame = echoFrames(~baseAnchIdx, :);
-    
-    % TODO
+
+    % TD2S for pairs (Anchor 1, Anchor 2) and (Anchor 1, Anchor 3)
+    tD2S = zeros(1,2);
+    for i = 1:2
+        distance = pdist([baseAnchOrigFrame(COORD_X) baseAnchOrigFrame(COORD_Y);
+                          nonbaseAnchOrigFrame(i,COORD_X) nonbaseAnchOrigFrame(i,COORD_Y)], 'euclidean');
+
+        tA2S = baseAnchEchoFrame(RX_TS) - baseAnchOrigFrame(RX_TS);
+        tB2S = nonbaseAnchEchoFrame(i,RX_TS) - nonbaseAnchOrigFrame(i,RX_TS);
+
+        tD2S(i) = distance/C - (tB2S - tA2S);
+    end;
+
+    coordinates123 = [baseAnchOrigFrame(COORD_X) baseAnchOrigFrame(COORD_Y);
+                      nonbaseAnchOrigFrame(1,COORD_X) nonbaseAnchOrigFrame(1,COORD_Y);
+                      nonbaseAnchOrigFrame(2,COORD_X) nonbaseAnchOrigFrame(2,COORD_Y)];
+
+    position123 = tdoa_analytical_original(coordinates123, ...
+                                           [NaN, tD2S(1), tD2S(2)] .* C);
+    positions = [positions position123];
 end
