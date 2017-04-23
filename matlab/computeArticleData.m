@@ -1,4 +1,5 @@
-function computeArticleData(results)
+function [absPosErrMin,absPosErrMax, ...
+          absPosErrAvg,absPosErrStdDev] = computeArticleData(results)
 
 % Columns
 COORD_X = 1;
@@ -8,7 +9,6 @@ REAL_COORD_Y = 4;
 
 % Variables
 absPosErr = zeros(size(results,1),1);
-absPosErrStdDev = 0;
 
 % Computations
 for i = 1:size(results,1)
@@ -16,6 +16,9 @@ for i = 1:size(results,1)
                           results(i,REAL_COORD_X) results(i,REAL_COORD_Y)],'euclidean');
 end
 
+absPosErrMin = min(absPosErr);
+absPosErrMax = max(absPosErr);
+absPosErrAvg = mean(absPosErr);
 absPosErrStdDev = std(absPosErr);
 
 end
