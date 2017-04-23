@@ -23,12 +23,14 @@ class WhistleAnchorRangingApplication :
         RecordedFrame (std::unique_ptr<const WhistleFrame> frame,
                        const omnetpp::SimTime& receptionTimestamp,
                        const omnetpp::SimTime& transmissionTimestamp,
-                       inet::Coord position);
+                       const inet::Coord& anchorPosition,
+                       const inet::Coord& mobilePosition);
 
         std::unique_ptr<const WhistleFrame> frame {nullptr};
         omnetpp::SimTime receptionTimestamp {0};
         omnetpp::SimTime transmissionTimestamp {0};
-        inet::Coord position;
+        inet::Coord anchorPosition;
+        inet::Coord mobilePosition;
     };
 
   private:
@@ -39,6 +41,8 @@ class WhistleAnchorRangingApplication :
     void handleMessage (omnetpp::cMessage* message) override;
 
     void onRxStateChangedCallback (inet::physicallayer::IRadio::ReceptionState state);
+
+    void onTxStateChangedCallback (inet::physicallayer::IRadio::TransmissionState state);
 
     void handleSelfMessage (cMessage* message);
 

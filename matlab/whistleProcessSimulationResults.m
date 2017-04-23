@@ -6,8 +6,10 @@ IS_ECHO_FRAME = 2; % 1 - replied frame, 0 - original frame
 SEQ_NO = 3;
 RX_TS = 4;
 TX_TS = 5;
-COORD_X = 6;
-COORD_Y = 7;
+ANCH_COORD_X = 6;
+ANCH_COORD_Y = 7;
+MOB_COORD_X = 8;
+MOB_COORD_Y = 9;
 
 C = 0.000299792458; % m/ps
 DELAY = 1000000000; % ps
@@ -41,8 +43,8 @@ for origSeqNoIdx = 1 : length(origSeqNums)
     % TD2S for pairs (Anchor 1, Anchor 2) and (Anchor 1, Anchor 3)
     tD2S = zeros(1,2);
     for i = 1:2
-        distance = pdist([baseAnchOrigFrame(COORD_X) baseAnchOrigFrame(COORD_Y);
-                          nonbaseAnchOrigFrame(i,COORD_X) nonbaseAnchOrigFrame(i,COORD_Y)], 'euclidean');
+        distance = pdist([baseAnchOrigFrame(ANCH_COORD_X) baseAnchOrigFrame(ANCH_COORD_Y);
+                          nonbaseAnchOrigFrame(i,ANCH_COORD_X) nonbaseAnchOrigFrame(i,ANCH_COORD_Y)], 'euclidean');
 
         tA2S = baseAnchEchoFrame(RX_TS) - baseAnchOrigFrame(RX_TS);
         tB2S = nonbaseAnchEchoFrame(i,RX_TS) - nonbaseAnchOrigFrame(i,RX_TS);
@@ -50,11 +52,16 @@ for origSeqNoIdx = 1 : length(origSeqNums)
         tD2S(i) = distance/C - (tB2S - tA2S);
     end;
 
-    coordinates123 = [baseAnchOrigFrame(COORD_X) baseAnchOrigFrame(COORD_Y);
-                      nonbaseAnchOrigFrame(1,COORD_X) nonbaseAnchOrigFrame(1,COORD_Y);
-                      nonbaseAnchOrigFrame(2,COORD_X) nonbaseAnchOrigFrame(2,COORD_Y)];
+    coordinates123 = [baseAnchOrigFrame(ANCH_COORD_X) baseAnchOrigFrame(ANCH_COORD_Y);
+                      nonbaseAnchOrigFrame(1,ANCH_COORD_X) nonbaseAnchOrigFrame(1,ANCH_COORD_Y);
+                      nonbaseAnchOrigFrame(2,ANCH_COORD_X) nonbaseAnchOrigFrame(2,ANCH_COORD_Y)];
 
     position123 = tdoa_analytical_original(coordinates123, ...
                                            [NaN, tD2S(1), tD2S(2)] .* C);
-    positions = [positions position123];
+                                       
+    % Compute reference position
+    refPosition = [(baseAnchEchoFrame(MOB_COORD_X) + baseAnchOrigFrame(MOB_COORD_X)) / 2, ...
+                   (baseAnchEchoFrame(MOB_COORD_Y) + baseAnchOrigFrame(MOB_COORD_Y)) / 2];
+             
+    positions = [positions; position123', refPosition];
 end

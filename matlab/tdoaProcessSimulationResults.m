@@ -115,6 +115,6 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 % 
 %     position234 = tdoa_analytical(coordinates234, timestamps234);
     
-    positions = [positions; position123(1), position123(2)];
+    positions = [positions; position123' roundResults(2,MOB_X_COORD:MOB_Y_COORD)];
 end
 

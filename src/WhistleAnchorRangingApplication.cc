@@ -37,6 +37,7 @@ WhistleAnchorRangingApplication::initialize (int stage)
 
         const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
         rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
+        rangingHost->addTxStateChangedCallback ([this] (IRadio::TransmissionState state) { this->onTxStateChangedCallback (state); });
     }
 }
 
@@ -54,8 +55,10 @@ WhistleAnchorRangingApplication::finish ()
         resultFile << entry.frame->getSequenceNumber () << ',';
         resultFile << entry.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
         resultFile << entry.transmissionTimestamp.inUnit (SIMTIME_PS) << ',';
-        resultFile << entry.position.x << ',';
-        resultFile << entry.position.y << '\n';
+        resultFile << entry.anchorPosition.x << ',';
+        resultFile << entry.anchorPosition.y << ',';
+        resultFile << entry.mobilePosition.x << ',';
+        resultFile << entry.mobilePosition.y << '\n';
     }
 
     resultFile.flush ();
@@ -94,12 +97,21 @@ WhistleAnchorRangingApplication::onRxStateChangedCallback (IRadio::ReceptionStat
 }
 
 void
+WhistleAnchorRangingApplication::onTxStateChangedCallback (IRadio::TransmissionState state)
+{
+    if (state == IRadio::TRANSMISSION_STATE_TRANSMITTING)
+    {
+        const auto mobileRangingHost = check_and_cast<RangingHost*> (getSimulation ()->getModuleByPath ("Mobile1"));
+        const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
+        recordedFrames.emplace_back (unique_ptr<const WhistleFrame> {scheduledEchoFrame.release ()}, getHWtime (), getHWtime (), rangingHost->getCurrentPosition (), mobileRangingHost->getCurrentPosition ());
+    }
+}
+
+void
 WhistleAnchorRangingApplication::handleSelfMessage (cMessage* message)
 {
     assert (scheduledEchoFrame);
-    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
-    recordedFrames.emplace_back (unique_ptr<const WhistleFrame> {scheduledEchoFrame->dup ()}, getHWtime (), getHWtime (), rangingHost->getCurrentPosition ());
-    sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (scheduledEchoFrame.release ()), 0);
+    sendFrame (MACAddress::BROADCAST_ADDRESS, unique_ptr<Frame> (scheduledEchoFrame->dup ()), 0);
 }
 
 void
@@ -119,18 +131,21 @@ WhistleAnchorRangingApplication::handleMessage (const WhistleFrame* frame)
     }
 
     const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
-    recordedFrames.emplace_back (unique_ptr<const WhistleFrame> (frame->dup ()), frameReceptionTimestamp, 0, rangingHost->getCurrentPosition ());
+    const auto mobileRangingHost = check_and_cast<RangingHost*> (getSimulation ()->getModuleByPath ("Mobile1"));
+    recordedFrames.emplace_back (unique_ptr<const WhistleFrame> (frame->dup ()), frameReceptionTimestamp, 0, rangingHost->getCurrentPosition (), mobileRangingHost->getCurrentPosition ());
     frameReceptionTimestamp = 0;
 }
 
 WhistleAnchorRangingApplication::RecordedFrame::RecordedFrame (unique_ptr<const WhistleFrame> frame,
                                                                const SimTime& receptionTimestamp,
                                                                const SimTime& transmissionTimestamp,
-                                                               Coord position) :
+                                                               const Coord& anchorPosition,
+                                                               const Coord& mobilePosition) :
     frame {move (frame)},
     receptionTimestamp {receptionTimestamp},
     transmissionTimestamp {transmissionTimestamp},
-    position {move (position)}
+    anchorPosition {anchorPosition},
+    mobilePosition {mobilePosition}
 {
     // ...
 }
