@@ -5,10 +5,10 @@ import inet.networklayer.configurator.generic.GenericNetworkConfigurator;
 import inet.physicallayer.idealradio.IdealRadioMedium;
 import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 
-network Network_TDoA
+network StationaryNetwork
 {
     parameters:
-	    @display("bgb=908,390");
+	    @display("bgb=908,450");
 
     submodules:
         visualizer: IntegratedCanvasVisualizer {
@@ -24,7 +24,7 @@ network Network_TDoA
         }
         
         Anchor1: RangingHost {
-            @display("p=300,150;i=device/accesspoint");
+            @display("p=300,100;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-01";
         }
@@ -36,13 +36,13 @@ network Network_TDoA
         }
 
         Anchor3: RangingHost {
-            @display("p=400,300;i=device/accesspoint");
+            @display("p=400,350;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-03";
         }
 
         Mobile1: RangingHost {
-            @display("p=600,250");
+            @display("p=400,200");
             mobilityType = "LinearMobility";
             nic.mac.address = "DE-AD-BE-EF-00-01";
             nic.mac.promiscuous = true;
