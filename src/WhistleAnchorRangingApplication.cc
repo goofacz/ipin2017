@@ -44,13 +44,20 @@ WhistleAnchorRangingApplication::initialize (int stage)
 void
 WhistleAnchorRangingApplication::finish ()
 {
-    auto ranginghHst = check_and_cast<RangingHost*> (getParentModule ());
-    ofstream resultFile;
-    resultFile.open ("whistle_simulation_result", ios_base::out | ios_base::app);
+    auto currentTimestamp = time (nullptr);
+    auto currentTime = localtime (&currentTimestamp);
+    ostringstream fileName;
+    fileName << "whistle_simulation_result_" <<
+             setw (2) << setfill ('0') <<  currentTime->tm_hour << "_" << setw (2) << setfill ('0') << currentTime->tm_min << "_" << setw (2) << setfill ('0') << currentTime->tm_sec << "__" <<
+             setw (2) << setfill ('0') << currentTime->tm_mday << "_" << setw (2) << setfill ('0') << currentTime->tm_mon << "_" << currentTime->tm_year + 1900;
 
+    ofstream resultFile;
+    resultFile.open (fileName.str (), ios_base::out | ios_base::app);
+
+    const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
     for (const auto& entry : recordedFrames)
     {
-        resultFile << ranginghHst->getLocalAddress ().getInt () << ',';
+        resultFile << rangingHost->getLocalAddress ().getInt () << ',';
         resultFile << entry.frame->getEchoFrame () << ',';
         resultFile << entry.frame->getSequenceNumber () << ',';
         resultFile << entry.receptionTimestamp.inUnit (SIMTIME_PS) << ',';
