@@ -64,8 +64,43 @@ propImperDiffClks_AbsErrs = [ ...
     computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_10kmh_imperfect_20ppm'))
 ];
 
-boxplot(propImperDiffClks_AbsErrs,'Labels',{'100ppb','1ppm','2ppm','5ppm','10ppm','20ppm'});
+figure;
+boxplot(propImperDiffClks_AbsErrs,'Labels',{'0.1','1','2','5','10','20'});
 ylabel('Absolute position error [m]');
-xlabel('Clock drift');
+xlabel('Clock drift [ppm]');
 
-endcomputeArticleData(whistleProcessSimulationResults('../simulations/whistle_0kmh_imperfect'));
+propSyncAnch_10kmh_100ppb = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_10kmh_imperfect_anch_sync_100ppb'));
+propSyncAnch_10kmh_10ppm = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_10kmh_imperfect'));
+propSyncAnch_20kmh_100ppb = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_20kmh_imperfect_anch_sync_100ppb'));
+propSyncAnch_20kmh_10ppm = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_20kmh_imperfect'));
+propSyncAnch_40kmh_100ppb = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_40kmh_imperfect_anch_sync_100ppb'));
+propSyncAnch_40kmh_10ppm = computeArticleData(tdoaProcessSimulationResults('../simulations/proposed_40kmh_imperfect'));
+
+propSyncAnch = [propSyncAnch_10kmh_100ppb', propSyncAnch_10kmh_10ppm', ...
+                propSyncAnch_20kmh_100ppb', propSyncAnch_20kmh_10ppm', ...
+                propSyncAnch_40kmh_100ppb', propSyncAnch_40kmh_10ppm'];
+            
+propSyncAnch_group = [ones(1,length(propSyncAnch_10kmh_100ppb)) .* 1, ones(1,length(propSyncAnch_10kmh_10ppm)) .* 2, ...
+                      ones(1,length(propSyncAnch_20kmh_100ppb)) .* 3, ones(1,length(propSyncAnch_20kmh_10ppm)) .* 4, ...
+                      ones(1,length(propSyncAnch_40kmh_100ppb)) .* 5, ones(1,length(propSyncAnch_40kmh_10ppm)) .* 6];
+
+propSyncAnch_positions = [1 1.4 2 2.4 3 3.4];
+
+propSyncAnch_colors = ['w', 'c', 'w', 'c', 'w', 'c'];
+                  
+figure;
+boxplot(propSyncAnch, propSyncAnch_group, ...
+        'Positions', propSyncAnch_positions);
+    
+set(gca,'xtick',[mean(propSyncAnch_positions(1:2)) mean(propSyncAnch_positions(3:4)) mean(propSyncAnch_positions(5:6))]);
+set(gca,'xticklabel',{'10', '20', '40'});
+
+ylabel('Absolute position error [m]');
+xlabel('Mobile node speed [km/h]');
+
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),propSyncAnch_colors(j),'FaceAlpha',.5);
+end
+
+end
