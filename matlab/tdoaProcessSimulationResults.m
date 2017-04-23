@@ -8,7 +8,7 @@ MOB_X_COORD = 6;
 MOB_Y_COORD = 7;
 
 C = 0.000299792458; % m/ps
-DELAY = 1000000000; % ps
+DELAY = 35000000000; % ps
 
 results = csvread(filePath);
 positions = [];
@@ -114,7 +114,10 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 %                      (((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C];
 % 
 %     position234 = tdoa_analytical(coordinates234, timestamps234);
+
+    % Reference mobile position
+    refPosition = roundResults(1,MOB_X_COORD:MOB_Y_COORD);
     
-    positions = [positions; position123' roundResults(2,MOB_X_COORD:MOB_Y_COORD)];
+    positions = [positions; position123' refPosition];
 end
 

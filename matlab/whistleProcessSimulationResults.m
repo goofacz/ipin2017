@@ -12,7 +12,7 @@ MOB_COORD_X = 8;
 MOB_COORD_Y = 9;
 
 C = 0.000299792458; % m/ps
-DELAY = 1000000000; % ps
+DELAY = 35000000000; % ps
 
 baseAnchorAddr = hex2dec('DEADBEEF1001'); % Anchor 1
 
@@ -59,9 +59,8 @@ for origSeqNoIdx = 1 : length(origSeqNums)
     position123 = tdoa_analytical_original(coordinates123, ...
                                            [NaN, tD2S(1), tD2S(2)] .* C);
                                        
-    % Compute reference position
-    refPosition = [(baseAnchEchoFrame(MOB_COORD_X) + baseAnchOrigFrame(MOB_COORD_X)) / 2, ...
-                   (baseAnchEchoFrame(MOB_COORD_Y) + baseAnchOrigFrame(MOB_COORD_Y)) / 2];
+    % Reference mobile position
+    refPosition = [baseAnchOrigFrame(MOB_COORD_X) baseAnchOrigFrame(MOB_COORD_Y)];
              
     positions = [positions; position123', refPosition];
 end

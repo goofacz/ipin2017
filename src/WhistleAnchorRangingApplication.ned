@@ -20,6 +20,6 @@ simple WhistleAnchorRangingApplication extends RangingApplication
 	parameters:
 	    @class(WhistleAnchorRangingApplication);
 	    bool isBaseAnchor = default(false);
-	    int echoFrameDelay @unit(ps) = default(1ms);
+	    int echoFrameDelay @unit(ps) = default(35ms);
 	    
 }
