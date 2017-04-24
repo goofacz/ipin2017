@@ -21,5 +21,6 @@ simple WhistleAnchorRangingApplication extends RangingApplication
 	    @class(WhistleAnchorRangingApplication);
 	    bool isBaseAnchor = default(false);
 	    int echoFrameDelay @unit(ps) = default(35ms);
+	    string resultsFileName = default("");
 	    
 }
