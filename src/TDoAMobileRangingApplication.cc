@@ -70,15 +70,12 @@ TDoAMobileRangingApplication::ReceivedBeacon::ReceivedBeacon (unique_ptr<const B
 void
 TDoAMobileRangingApplication::storeResults ()
 {
-    auto currentTimestamp = time (nullptr);
-    auto currentTime = localtime (&currentTimestamp);
-    ostringstream fileName;
-    fileName << "tdoa_simulation_result_" <<
-             setw (2) << setfill ('0') <<  currentTime->tm_hour << "_" << setw (2) << setfill ('0') << currentTime->tm_min << "_" << setw (2) << setfill ('0') << currentTime->tm_sec << "__" <<
-             setw (2) << setfill ('0') << currentTime->tm_mday << "_" << setw (2) << setfill ('0') << currentTime->tm_mon << "_" << currentTime->tm_year + 1900;
+    const auto& resultsFileNameParameter = par ("resultsFileName");
+    assert (resultsFileNameParameter.getType () == cPar::STRING);
+    assert (resultsFileNameParameter.stdstringValue () != "");
 
     ofstream resultFile;
-    resultFile.open (fileName.str (), ios_base::out | ios_base::app);
+    resultFile.open (resultsFileNameParameter.stringValue (), ios_base::out | ios_base::app);
 
     for (const auto& entry : receivedBeacons)
     {
