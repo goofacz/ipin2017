@@ -42,7 +42,7 @@ network MovingNetwork
         }
 
         Mobile1: RangingHost {
-            @display("p=600,200");
+            @display("p=200,200");
             mobilityType = "LinearMobility";
             nic.mac.address = "DE-AD-BE-EF-00-01";
             nic.mac.promiscuous = true;
