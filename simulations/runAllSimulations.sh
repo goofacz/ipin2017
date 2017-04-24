@@ -18,3 +18,7 @@
 ../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false tdoa.ini -c TDoA_moving_10kmh_mobile_imperfect_anch_sync_100ppb_clock &
 ../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false tdoa.ini -c TDoA_moving_20kmh_mobile_imperfect_anch_sync_100ppb_clock &
 ../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false tdoa.ini -c TDoA_moving_30kmh_mobile_imperfect_anch_sync_100ppb_clock &
+../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false whistle.ini -c Whistle_moving_5kmh_mobile_imperfect_clock &
+../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false whistle.ini -c Whistle_moving_10kmh_mobile_imperfect_clock &
+../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false whistle.ini -c Whistle_moving_20kmh_mobile_imperfect_clock &
+../src/ipin2017 -u Cmdenv -r 0 -n ../src:.:../../inet/examples:../../inet/src:../../inet/tutorials -l ../../inet/src/INET --debug-on-errors=false whistle.ini -c Whistle_moving_30kmh_mobile_imperfect_clock &
