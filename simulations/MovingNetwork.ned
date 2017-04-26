@@ -8,35 +8,35 @@ import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 network MovingNetwork
 {
     parameters:
-	    @display("bgb=908,450");
+        @display("bgb=700,600");
 
     submodules:
         visualizer: IntegratedCanvasVisualizer {
-            @display("p=128,24");
+            @display("p=44.46,79.8");
         }
 
         configurator: GenericNetworkConfigurator {
-            @display("p=219,24");
+            @display("p=44.46,142.5");
         }
-        
+
         radioMedium: IdealRadioMedium {
             @display("p=44,26");
         }
-        
+
         Anchor1: RangingHost {
-            @display("p=300,100;i=device/accesspoint");
+            @display("p=150,50;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-01";
         }
-        
+
         Anchor2: RangingHost {
-            @display("p=500,50;i=device/accesspoint");
+            @display("p=650,100;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-02";
         }
 
         Anchor3: RangingHost {
-            @display("p=400,350;i=device/accesspoint");
+            @display("p=400,550;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-03";
         }
