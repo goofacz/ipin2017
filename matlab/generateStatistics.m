@@ -48,7 +48,7 @@ for i = 1:size(propStatPerfFiles,1)
     propStatPerfErrs = [propStatPerfErrs; absErrs'];
 end
 
-%% Proposed method for stationary node (perfect clock)
+%% Proposed method for stationary node (imperfect clock)
 propStatImperfFiles = [...
   '../simulations/tdoa_stat_imperf_350_150';...
   '../simulations/tdoa_stat_imperf_350_200';...
@@ -77,6 +77,11 @@ for i = 1:size(propStatPerfFiles,1)
     propStatImperfErrs = [propStatImperfErrs; absErrs'];
 end
 
+% figure;
+% boxplot(propStatImperfErrs');
+% ylabel('Absolute position error [m]');
+% xlabel('Mobile node no.');
+
 %% Proposed method for moving node (perfect clock)
 % Stationary nodes are indexed directly
 propMovPerf = zeros(4,4);
@@ -90,11 +95,11 @@ propMovPerf = zeros(4,4);
 
 propMovImperf = zeros(4,4);
 
-[~, propMovImperf(MOV_5_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_5kmh_imperf'));
-[~, propMovImperf(MOV_10_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_10kmh_imperf'));
-[~, propMovImperf(MOV_20_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_20kmh_imperf'));
-[~, propMovImperf(MOV_30_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_30kmh_imperf'));
-
+[propMovImperf_5kmh, propMovImperf(MOV_5_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_5kmh_imperf'));
+[propMovImperf_10kmh, propMovImperf(MOV_10_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_10kmh_imperf'));
+[propMovImperf_20kmh, propMovImperf(MOV_20_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_20kmh_imperf'));
+[propMovImperf_30kmh, propMovImperf(MOV_30_KMH,:)] = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_30kmh_imperf'));
+return
 %% Proposed method for moving node (imperfect clock, anchors clocks with diffrent ppm)
 propImperDiffClks_AbsErrs = [ ...
     computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_10kmh_imperf_100ppb')), ...
@@ -110,6 +115,7 @@ boxplot(propImperDiffClks_AbsErrs,'Labels',{'0.1','1','2','5','10','20'});
 ylabel('Absolute position error [m]');
 xlabel('Clock drift [ppm]');
 
+%%
 propSyncAnch_10kmh_100ppb = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_10kmh_imperf_synch_anch_100ppb'));
 propSyncAnch_10kmh_10ppm = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_10kmh_imperf'));
 propSyncAnch_20kmh_100ppb = computeArticleData(tdoaProcessSimulationResults('../simulations/tdoa_20kmh_imperf_synch_anch_100ppb'));
@@ -143,6 +149,45 @@ h = findobj(gca,'Tag','Box');
 for j=1:length(h)
     patch(get(h(j),'XData'),get(h(j),'YData'),propSyncAnch_colors(j),'FaceAlpha',.5);
 end
+
+%% Put proposed method and Whistle aside (moving node, imperfect clock)
+
+whistleMovImperf = zeros(4,4);
+
+[whistleMovImperf_5kmh whistleMovImperf(MOV_5_KMH,:)] = computeArticleData(whistleProcessSimulationResults('../simulations/whistle_5kmh_imperf'));
+[whistleMovImperf_10kmh whistleMovImperf(MOV_10_KMH,:)] = computeArticleData(whistleProcessSimulationResults('../simulations/whistle_10kmh_imperf'));
+[whistleMovImperf_20kmh whistleMovImperf(MOV_20_KMH,:)] = computeArticleData(whistleProcessSimulationResults('../simulations/whistle_20kmh_imperf'));
+[whistleMovImperf_30kmh whistleMovImperf(MOV_30_KMH,:)] = computeArticleData(whistleProcessSimulationResults('../simulations/whistle_30kmh_imperf'));
+
+propVsWhistle = [propMovImperf_5kmh', whistleMovImperf_5kmh', ...
+                 propMovImperf_10kmh', whistleMovImperf_10kmh', ...
+                 propMovImperf_20kmh', whistleMovImperf_20kmh', ...
+                 propMovImperf_30kmh', whistleMovImperf_30kmh'];
+            
+propVsWhistle_group = [ones(1,length(propMovImperf_5kmh)) .* 1, ones(1,length(whistleMovImperf_5kmh)) .* 2, ...
+                       ones(1,length(propMovImperf_10kmh)) .* 3, ones(1,length (whistleMovImperf_10kmh)) .* 4, ...
+                       ones(1,length(propMovImperf_20kmh)) .* 5, ones(1,length(whistleMovImperf_20kmh)) .* 6, ...
+                       ones(1,length(propMovImperf_30kmh)) .* 7, ones(1,length(whistleMovImperf_30kmh)) .* 8];
+
+propVsWhistle_positions = [1, 1.4, 2 2.4, 3 3.4, 4 4.4];
+
+propVsWhistle_colors = ['w', 'c', 'w', 'c', 'w', 'c', 'w', 'c'];
+                  
+figure;
+boxplot(propVsWhistle, propVsWhistle_group, ...
+        'Positions', propVsWhistle_positions);
+    
+set(gca,'xtick',[mean(propVsWhistle_positions(1:2)) mean(propVsWhistle_positions(3:4)) mean(propVsWhistle_positions(5:6)) mean(propVsWhistle_positions(7:8))]);
+set(gca,'xticklabel',{'5', '10', '20', '30'});
+
+ylabel('Absolute position error [m]');
+xlabel('Mobile node speed [km/h]');
+
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),propVsWhistle_colors(j),'FaceAlpha',.5);
+end
+
 
 return
 
