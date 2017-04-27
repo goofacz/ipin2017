@@ -8,7 +8,8 @@ import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 network StationaryNetwork
 {
     parameters:
-        @display("bgb=700,600");
+        @display("bgb=700,700");
+        int mobilesNumber = default(0);
 
     submodules:
         visualizer: IntegratedCanvasVisualizer {
@@ -44,8 +45,10 @@ network StationaryNetwork
 		//
 		// Mobile nodes
 		//
-        Mobiles[25]: RangingHost {
+        Mobiles[mobilesNumber]: RangingHost {
+            @display("p=300,300");
             nic.mac.promiscuous = true;
+            mobilityType = "StaticGridMobility";
         }
 
 //        Mobile1: RangingHost {
