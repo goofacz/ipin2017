@@ -37,6 +37,7 @@ class TDoAMobileRangingApplication :
 
     omnetpp::SimTime beaconReceptionTimestamp {0};
     std::vector<ReceivedBeacon> receivedBeacons;
+    inet::Coord initialPosition;
 };
 
 }; // namespace ipin2017

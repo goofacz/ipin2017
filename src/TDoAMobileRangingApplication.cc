@@ -30,6 +30,8 @@ TDoAMobileRangingApplication::initialize (int stage)
     {
         const auto rangingHost = check_and_cast<RangingHost*> (getParentModule ());
         rangingHost->addRxStateChangedCallback ([this] (IRadio::ReceptionState state) { this->onRxStateChangedCallback (state); });
+
+        initialPosition = rangingHost->getCurrentPosition ();
     }
 }
 
@@ -74,8 +76,10 @@ TDoAMobileRangingApplication::storeResults ()
     assert (resultsFileNameParameter.getType () == cPar::STRING);
     assert (resultsFileNameParameter.stdstringValue () != "");
 
+    ostringstream resultFileName;
     ofstream resultFile;
-    resultFile.open (resultsFileNameParameter.stringValue (), ios_base::out | ios_base::app);
+    resultFileName << resultsFileNameParameter.stringValue () << '_' << int(initialPosition.x) << "m_" << int(initialPosition.y) << 'm';
+    resultFile.open (resultFileName.str (), ios_base::out | ios_base::app);
 
     for (const auto& entry : receivedBeacons)
     {
