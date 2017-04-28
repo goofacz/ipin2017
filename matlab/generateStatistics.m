@@ -5,6 +5,7 @@ MIN_ERR = 1;
 MAX_ERR = 2;
 AVG_ERR = 3;
 STDDEV_ERR = 4;
+MEDIAN_ERR = 5;
 
 % Rows fo 'propMovPerf'
 MOV_5_KMH = 1;

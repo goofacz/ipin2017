@@ -5,6 +5,10 @@
 % - algoName: 'tdoa' or 'whisle' string
 % - x: X coordinate
 % - y: Y coordinate
+% - direction: move direction, values:
+%    - 0deg - left -> right
+%    - 45deg - top-left -> bottom-right
+%    - 90deg - up -> down
 % 
 % INPUT (optional):
 % - drift: clock drift (e.g. pass 10e-6 to analyze 10ppm dritf)
@@ -12,19 +16,19 @@
 % 
 % OUTPUT:
 % Matrix m x n, where m (rows) represent consecutive speeds and n (columns) 
-% represents statistics: min, max, avg, std respectively.
+% represents statistics: min, max, avg, std and median respectively.
 % 
 % EXAMPLE:
 % To analyze perfect clock simulation omit "drift" and "seedNo":
 % 
-%     [result]=analyzeMovingNode('tdoa', 100, 400)
+%     [result]=analyzeMovingNode('tdoa', 100, 400, '90deg')
 %     
 % To analyze imperfect clock simulation pass "drift" and "seedNo":
 % 
-%     [result]=analyzeMovingNode('tdoa', 100, 300, 10e-6, 3)
+%     [result]=analyzeMovingNode('tdoa', 100, 300, '90deg', 10e-6, 3)
 %
 
-function [absErrStats] = analyzeMovingNode(algoName, x, y, drift, seedNo)
+function [absErrStats] = analyzeMovingNode(algoName, x, y, direction, drift, seedNo)
 
 if exist('drift', 'var') == 0
     drift = 0;
@@ -35,16 +39,16 @@ if exist('seedNo', 'var') == 0
 end
 
 speeds = [5, 10, 20, 40];
-absErrStats = zeros(length(speeds),4);
+absErrStats = zeros(length(speeds),5);
 
 for i = 1:length(speeds)
-    [~, absErrStats(i,:)] = analyzeSingleSimulation(algoName, speeds(i), x, y, drift, seedNo);
+    [~, absErrStats(i,:)] = analyzeSingleSimulation(algoName, speeds(i), x, y, direction, drift, seedNo);
 end
 
 end
 
 %% Helper function
-function [absPosErrs, absErrStats] = analyzeSingleSimulation(algoName, speed,  x, y, drift, seedNo)
+function [absPosErrs, absErrStats] = analyzeSingleSimulation(algoName, speed,  x, y, direction, drift, seedNo)
 
 if drift == 0
     clockText = strcat('perf');
@@ -58,7 +62,7 @@ else
     seedText = '_';
 end
 
-filePath = strcat('../simulations/', algoName, '_', clockText, '_', int2str(speed), 'kmph', seedText, int2str(x), 'm_', int2str(y), 'm');
+filePath = strcat('../simulations/', algoName, '_', clockText, '_', int2str(speed), 'kmph_', direction, seedText, int2str(x), 'm_', int2str(y), 'm');
 
 if strcmp(algoName, 'tdoa') == 1
     results = tdoaProcessSimulationResults(filePath);
@@ -66,5 +70,5 @@ else
     results = whistleProcessSimulationResults(filePath);
 end
 
-[absPosErrs, absErrStats] = computeArticleData(results);
+[~, ~, absPosErrs, absErrStats] = computeArticleData(results);
 end
