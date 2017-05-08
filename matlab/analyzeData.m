@@ -1,10 +1,11 @@
-% Analyze all sort of moving simulation results. 
+% Analyze all sort of simulation results. 
 % Simulation results have to be in "simulations" in parent folder. 
 %
 % INPUT (mandatory):
 % - algoName: 'tdoa' or 'whisle' string
 % - x: X coordinate
 % - y: Y coordinate
+% - speeds: vector with node speeds ('0' for stationary simulations)
 % 
 % INPUT (optional):
 % - drift: clock drift (e.g. pass 10e-6 to analyze 10ppm dritf)
@@ -15,16 +16,18 @@
 % represents statistics: min, max, avg, std respectively.
 % 
 % EXAMPLE:
-% To analyze perfect clock simulation omit "drift" and "seedNo":
+% To analyze perfect clock simulation omit "drift" and "seedNo" for 
+% stationary nodes:
 % 
-%     [result]=analyzeMovingNode('tdoa', 100, 400)
+%     [result]=analyzeMovingNode('tdoa', 100, 400, [0])
 %     
-% To analyze imperfect clock simulation pass "drift" and "seedNo":
+% To analyze imperfect clock simulation pass "drift" and "seedNo" for nodes 
+% running at different speeds ([5, 10, 20, 40]):
 % 
-%     [result]=analyzeMovingNode('tdoa', 100, 300, 10e-6, 3)
+%     [result]=analyzeMovingNode('tdoa', 100, 300, [5, 10, 20, 40], 10e-6, 3)
 %
 
-function [absErrStats] = analyzeMovingNode(algoName, x, y, drift, seedNo)
+function [absErrStats] = analyzeData(algoName, x, y, speeds, drift, seedNo)
 
 if exist('drift', 'var') == 0
     drift = 0;
@@ -34,7 +37,6 @@ if exist('seedNo', 'var') == 0
     seedNo = 0;
 end
 
-speeds = [5, 10, 20, 40];
 absErrStats = zeros(length(speeds),4);
 
 for i = 1:length(speeds)
