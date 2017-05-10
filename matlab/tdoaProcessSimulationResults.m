@@ -116,7 +116,7 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 %     position234 = tdoa_analytical(coordinates234, timestamps234);
 
     % Reference mobile position
-    refPosition = roundResults(1,MOB_X_COORD:MOB_Y_COORD);
+    refPosition = roundResults(2,MOB_X_COORD:MOB_Y_COORD);
     
     positions = [positions; position123' refPosition];
 end
