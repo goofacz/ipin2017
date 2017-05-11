@@ -20,10 +20,10 @@ for speedIdx = 1 : length(speed)
         allAbsPosErrs = [allAbsPosErrs absPosErrs];
     end 
     
-    sufX = linspace(100 + speed(speedIdx), 500 - speed(speedIdx), length(absPosErrs));
+    surfX = linspace(100 + speed(speedIdx), 500 - speed(speedIdx), length(absPosErrs));
     
     figure;
-    surf(sufX,y,allAbsPosErrs');
+    surf(surfX,y,smooth2d(allAbsPosErrs',1,'max'));
     title(sprintf('Proposed method (moving node at %d m/s)',speed(speedIdx)));
     xlabel('X coordinate');
     ylabel('Y coordinate');
