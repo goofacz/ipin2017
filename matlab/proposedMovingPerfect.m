@@ -8,9 +8,15 @@ STD = 4;
 
 x = 100;
 sufX = linspace(110, 490, 39);
-y = [100, 200, 300, 400, 500];
+y = linspace(100, 500, 21);
 speed = 10; %mps
 angle = 0; % deg
+
+labels = {'(100,100)', '(100, 120)', '(100, 140)', '(100, 160)', '(100, 180)', ...
+          '(100,100)', '(100, 220)', '(100, 240)', '(100, 260)', '(100, 280)', ...
+          '(100,100)', '(100, 320)', '(100, 340)', '(100, 360)', '(100, 380)', ...
+          '(100,100)', '(100, 420)', '(100, 440)', '(100, 460)', '(100, 480)', ...
+          '(100,500)'};
 
 allAbsPosErrs = [];
 
@@ -19,20 +25,17 @@ for yIdx = 1 : length(y)
     allAbsPosErrs = [allAbsPosErrs absPosErrs];
 end 
 
+figure;
 surf(sufX,y,allAbsPosErrs');
-hold on;
 title('Proposed method (moving node)');
 xlabel('X coordinate');
 ylabel('Y coordinate');
 zlabel('Mean absolute position error [m]');
-hold off;
 
 figure;
-boxplot(allAbsPosErrs,'Labels',{'(100, 100)', '(100, 200)', '(100, 300)', '(100, 400)', '(100, 500)'});
-hold on;
+boxplot(allAbsPosErrs,'Labels',labels);
 title('Proposed method (moving node)');
 ylabel('Absolute position error [m]');
 xlabel('Initial position ([m], [m])');
-hold off;
 
 end
