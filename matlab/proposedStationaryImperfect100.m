@@ -12,15 +12,17 @@ x = linspace(195,555,10);
 y = linspace(120,480,10);
 
 for driftIdx = 1 : length(drift)
+    meanPosErrs = zeros(length(x),length(y));
     for xIdx = 1 : length(x)
        for yIdx = 1 : length(y)
             [~, ~, ~, absErrStats]=analyzeStationaryNode(resultsDir, 'tdoa', x(xIdx), y(yIdx), drift(driftIdx), seedNo);
-            meaPosErrs(xIdx,yIdx) = absErrStats(MEAN);
+            meanPosErrs(xIdx,yIdx) = absErrStats(MEAN);
         end 
     end
     
     figure;
-    surf(x,y,smooth2d(meaPosErrs',1,'max'));
+    surf(x,y,smooth2d(meanPosErrs',1,'max'));
+    
     title(sprintf('Proposed method (stationary node) %f ppm',drift(driftIdx) * 1000000));
     xlabel('X coordinate');
     ylabel('Y coordinate');

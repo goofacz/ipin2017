@@ -21,7 +21,7 @@ labels = {'(100,100)', '(100, 120)', '(100, 140)', '(100, 160)', '(100, 180)', .
 allAbsPosErrs = [];
 
 for yIdx = 1 : length(y)
-    [approxPos, realPos, absPosErrs, absErrStats]=analyzeMovingNode(resultsDir, 'tdoa', x, y(yIdx), speed, angle);
+    [~, ~, absPosErrs, ~]=analyzeMovingNode(resultsDir, 'tdoa', x, y(yIdx), speed, angle);
     allAbsPosErrs = [allAbsPosErrs absPosErrs];
 end 
 
@@ -37,5 +37,7 @@ boxplot(allAbsPosErrs,'Labels',labels);
 title('Proposed method (moving node)');
 ylabel('Absolute position error [m]');
 xlabel('Initial position ([m], [m])');
+
+% TODO
 
 end

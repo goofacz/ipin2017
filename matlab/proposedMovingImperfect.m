@@ -7,17 +7,27 @@ MEAN = 3;
 STD = 4;
 
 x = 100;
-sufX = linspace(110, 490, 39);
-y = [100, 200, 300, 400, 500];
+y = linspace(100, 500, 21);
 speed = [1 2 5 10]; %mps
 angle = 0; % deg
 drift = 10e-06;
 seedNo = 1;
 
 for speedIdx = 1 : length(speed)
+    allAbsPosErrs = [];
     for yIdx = 1 : length(y)
-        [approxPos, realPos, absPosErrs, absErrStats]=analyzeMovingNode(resultsDir, 'tdoa', x, y(yIdx), speed(speedIdx), angle, drift, seedNo);
+        [~, realPos, absPosErrs, ~]=analyzeMovingNode(resultsDir, 'tdoa', x, y(yIdx), speed(speedIdx), angle, drift, seedNo);
+        allAbsPosErrs = [allAbsPosErrs absPosErrs];
     end 
+    
+    sufX = linspace(100 + speed(speedIdx), 500 - speed(speedIdx), length(absPosErrs));
+    
+    figure;
+    surf(sufX,y,allAbsPosErrs');
+    title(sprintf('Proposed method (moving node at %d m/s)',speed(speedIdx)));
+    xlabel('X coordinate');
+    ylabel('Y coordinate');
+    zlabel('Mean absolute position error [m]');
 end
 
 % TODO
