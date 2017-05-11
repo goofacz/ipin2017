@@ -31,7 +31,7 @@ network StationaryNetwork
         }
 
         Anchor2: RangingHost {
-            @display("p=650,100;i=device/accesspoint");
+            @display("p=650,150;i=device/accesspoint");
             mobilityType = "StationaryMobility";
             nic.mac.address = "DE-AD-BE-EF-10-02";
         }
