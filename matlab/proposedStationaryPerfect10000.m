@@ -1,4 +1,4 @@
-function proposedStationaryPerfect10000(resultsDir)
+function [x,y,meaPosErrs] = proposedStationaryPerfect10000(resultsDir)
 
 % absPosErrs columns
 MIN = 1;
@@ -19,7 +19,7 @@ for xIdx = 1 : length(x)
 end
 
 figure;
-surf(x,y,meaPosErrs');
+surf(x,y,smooth2d(meaPosErrs'));
 title('Proposed method (10k stationary nodes)');
 xlabel('X coordinate');
 ylabel('Y coordinate');

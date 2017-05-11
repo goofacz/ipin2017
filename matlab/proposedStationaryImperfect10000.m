@@ -1,4 +1,4 @@
-function proposedStationaryImperfect10000(resultsDir)
+function [x,y,meaPosErrs] = proposedStationaryImperfect10000(resultsDir)
 
 % absPosErrs columns
 MIN = 1;
