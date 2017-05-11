@@ -7,9 +7,9 @@ MEAN = 3;
 STD = 4;
 
 seedNo = 1;
-drift = [10e-8, 1e-6, 2e-6, 5e-6, 10e-6, 20e-6];
-x = [215, 295, 375, 455, 535];
-y = [140, 220, 300, 380, 460];
+drift = [10e-8];%, 1e-6, 2e-6, 5e-6, 10e-6, 20e-6];
+x = linspace(177,573,100);
+y = linspace(102,498,100);
 
 for driftIdx = 1 : length(drift)
     for xIdx = 1 : length(x)
@@ -18,6 +18,13 @@ for driftIdx = 1 : length(drift)
             meaPosErrs(xIdx,yIdx) = absErrStats(MEAN);
         end 
     end
+    
+    figure;
+    surf(x,y,meaPosErrs');
+    title(sprintf('Proposed method (stationary node) %f ppm',drift(driftIdx)));
+    xlabel('X coordinate');
+    ylabel('Y coordinate');
+    zlabel('Mean absolute position error [m]');
 end
 
 % TODO

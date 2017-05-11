@@ -6,8 +6,8 @@ MAX = 2;
 MEAN = 3;
 STD = 4;
 
-x = [215, 295, 375, 455, 535];
-y = [140, 220, 300, 380, 460];
+x = linspace(195,555,10);
+y = linspace(120,480,10);
 
 meaPosErrs = zeros(length(x), length(y));
 
