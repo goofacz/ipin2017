@@ -26,17 +26,18 @@ for yIdx = 1 : length(y)
 end 
 
 figure;
-surf(sufX,y,allAbsPosErrs');
-title('Proposed method (moving node)');
+surf(sufX,y,allAbsPosErrs','EdgeColor','none');
+title('Proposed method (moving node, perfect clock)');
 xlabel('X coordinate');
 ylabel('Y coordinate');
 zlabel('Mean absolute position error [m]');
 
 figure;
 boxplot(allAbsPosErrs,'Labels',labels);
-title('Proposed method (moving node)');
+title('Proposed method (moving node, perfect clock)');
 ylabel('Absolute position error [m]');
 xlabel('Initial position ([m], [m])');
+set(gca,'Ydir','reverse')
 
 % TODO
 

@@ -1,4 +1,4 @@
-function [x,y,meaPosErrs] = proposedStationaryImperfect10000(resultsDir)
+function [x,y,meaPosErrs,absPosError] = proposedStationaryImperfect10000(resultsDir)
 
 % absPosErrs columns
 MIN = 1;
@@ -13,17 +13,19 @@ y = linspace(102,498,100);
 
 for xIdx = 1 : length(x)
    for yIdx = 1 : length(y)
-        [~, ~, ~, absErrStats]=analyzeStationaryNode(resultsDir, 'tdoa', x(xIdx), y(yIdx), drift, seedNo);
-        meaPosErrs(xIdx,yIdx) = absErrStats(MEAN);
+        [~, ~, absPosError, absErrStats]=analyzeStationaryNode(resultsDir, 'tdoa', x(xIdx), y(yIdx), drift, seedNo);
+        meaPosErrs(xIdx,yIdx) = absErrStats(MAX);
     end 
 end
 
 figure;
-surf(x,y,meaPosErrs');
-title(sprintf('Proposed method (10k stationary nodes) 10 ppm'));
+surf(x,y,smooth2d(meaPosErrs',3),'EdgeColor','none');
+title(sprintf('Proposed method (stationary nodes, 10 ppm clock)'));
 xlabel('X coordinate');
 ylabel('Y coordinate');
 zlabel('Mean absolute position error [m]');
+set(gca,'Ydir','reverse')
+
 
 % TODO
 

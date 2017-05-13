@@ -14,7 +14,7 @@ drift = 10e-06;
 seedNo = 1;
 
 global correctDriftPPM;
-correctDriftPPM = 10; % if 0 then no drift correction
+correctDriftPPM = 0; % if 0 then no drift correction
 
 for speedIdx = 1 : length(speed)
     allAbsPosErrs = [];
@@ -28,11 +28,12 @@ for speedIdx = 1 : length(speed)
     surfX = linspace(100 + speed(speedIdx), 500 - speed(speedIdx), length(absPosErrs));
     
     figure;
-    surf(surfX,y,smooth2d(allAbsPosErrs',1,'mean'));
+    surf(surfX,y,smooth2d(allAbsPosErrs',1,'mean'),'EdgeColor','none');
     title(sprintf('Proposed method (moving node at %d m/s)',speed(speedIdx)));
     xlabel('X coordinate');
     ylabel('Y coordinate');
     zlabel('Mean absolute position error [m]');
+    set(gca,'Ydir','reverse')
 end
 
 % TODO
