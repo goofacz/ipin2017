@@ -10,7 +10,13 @@ MOB_Y_COORD = 7;
 C = 0.000299792458; % m/ps
 DELAY = 35000000000; % ps
 
+global correctDriftPPM;
+
 results = csvread(filePath);
+if correctDriftPPM~=0
+    results = simulateNewDrift(results, correctDriftPPM);
+end
+
 positions = [];
 
 for seqNo = 1 : max(results(:,SEQ_NO))
