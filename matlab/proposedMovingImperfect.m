@@ -1,4 +1,4 @@
-function proposedMovingImperfect(resultsDir)
+function allAbsPosErrs = proposedMovingImperfect(resultsDir, drift)
 
 % absPosErrs columns
 MIN = 1;
@@ -8,10 +8,12 @@ STD = 4;
 
 x = 100;
 y = linspace(100, 500, 21);
-speed = [1 2 5 10]; %mps
+speed = [10]; %mps
 angle = 0; % deg
-drift = 10e-06;
-seedNo = 1;
+if ~exist('drift','var')
+    drift = 2e-06;
+end
+seedNo = 2;
 
 global correctDriftPPM;
 correctDriftPPM = 0; % if 0 then no drift correction

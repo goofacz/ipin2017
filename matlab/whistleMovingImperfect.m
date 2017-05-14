@@ -11,7 +11,7 @@ y = linspace(100, 500, 21);
 speed = [1 5 10]; %mps
 angle = 0; % deg
 drift = 10e-06;
-seedNo = 1;
+seedNo = 2;
 
 for speedIdx = 1 : length(speed)
     allAbsPosErrs = [];
