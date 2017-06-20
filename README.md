@@ -10,3 +10,6 @@ Individual simulation scenarios can be run using OMNET++ IDE. Simulations can be
 
 [1]: http://www.ipin2017.org/
 [2]: https://github.com/JenSte/omnet-ptp
+
+# Author
+Tomasz Jankowski <tomasz.jankowski AT pwr.edu.pl>
