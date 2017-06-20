@@ -6,7 +6,7 @@ Simulation uses modified [imperfect clock model for OMNET++][2] created by Jens 
 
 # Running simulation
 
-Simulations can be run using OMNET++ IDE or in command line using helper scripts from `simulation` directory.
+Individual simulation scenarios can be run using OMNET++ IDE. Simulations can be run in batch mode using helper scripts (`run`*SimulationCase*`.sh`) in `simulation` directory. Each simulation stores results in single CSV file in `simulations` directory. Name of that file depends on simulation scenario, for details refer to `simulations/ipin.ini`.
 
 [1]: http://www.ipin2017.org/
 [2]: https://github.com/JenSte/omnet-ptp
