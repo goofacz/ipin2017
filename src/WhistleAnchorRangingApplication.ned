@@ -15,12 +15,21 @@
 
 package ipin2017;
 
+//
+// Application implementing anchor side of Whistle localization method.
+//
 simple WhistleAnchorRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(WhistleAnchorRangingApplication);
+	    
+	    // Whether anchor is a base node.
 	    bool isBaseAnchor = default(false);
+	    
+	    // Delay after which anchor will transmit it's message.
 	    int echoFrameDelay @unit(ps) = default(35ms);
+	    
+	    // File name in which measurements will be stored (do not set manually).
 	    string resultsFileName = default("");
 	    
 }

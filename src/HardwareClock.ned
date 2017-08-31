@@ -19,6 +19,10 @@
 
 package ipin2017;
 
+//
+// Hardware clock component. For more details please refer to 
+// https://github.com/JenSte/omnet-ptp
+//
 moduleinterface IHardwareClock
 {
 }

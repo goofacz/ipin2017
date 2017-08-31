@@ -20,6 +20,9 @@ import inet.linklayer.ideal.IdealWirelessNic;
 import inet.networklayer.common.InterfaceTable;
 import inet.networklayer.generic.GenericRoutingTable;
 
+//
+// Component representing wireless node. Can be configred to be either mobile or anchor node.
+//
 module RangingHost extends MobileHost
 {
     parameters:
@@ -27,7 +30,12 @@ module RangingHost extends MobileHost
         @networkNode();
         *.interfaceTableModule = default(absPath(".interfaceTable"));
 
+		// Desired clock type to by used by node. Possible values are: "NoneDrift", "ConstantDrift", 
+		// "BoundedDrift" and "BoundedDriftVariation".
         string clockType = default("");
+        
+        // Desired application to be run on node. Possible values are: "WhistleAnchorRangingApplication", 
+        // "WhistleMobileRangingApplication", "TDoAMobileRangingApplication" and "TDoAAnchorRangingApplication".
         string applicationType = default("");
 
     gates:

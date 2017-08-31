@@ -15,10 +15,17 @@
 
 package ipin2017;
 
+//
+// Application implementing mobile side of proposed localization method.
+//
 simple TDoAMobileRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(TDoAMobileRangingApplication);
+	    
+	    // TODO
 	    int broadcastReplyDelay @unit(us) = default(1s);
+	    
+	    // File name in which measurements will be stored (do not set manually).
 	    string resultsFileName = default("");
 }

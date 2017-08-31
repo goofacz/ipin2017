@@ -15,9 +15,14 @@
 
 package ipin2017;
 
+//
+// Application implementing mobile side of Whistle localization method.
+//
 simple WhistleMobileRangingApplication extends RangingApplication
 {
 	parameters:
 	    @class(WhistleMobileRangingApplication);
+	    
+	    // Interval between frame transmissions.
 	    int frameTransmissionInterval @unit(ps) = default(1s);
 }
