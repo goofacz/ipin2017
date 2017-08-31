@@ -4,6 +4,11 @@ Repository provides simulation software developed for "*Synchronization-free TDo
 
 Simulation uses modified [imperfect hardware clock model for OMNET++][3] created by Jens Steinhauser.
 
+# Setup
+
+* Download and install OMNET++ 5.0 and INET 3.4.0 on your platform.
+* Checkout and import this project into OMNET++.
+
 # Running simulation
 
 Individual simulation scenarios can be run using OMNET++ IDE in GUI mode and in command line using OMNET++ utility tools like `opp_run` and `opp_run`. Simulations can be run in parallel using helper scripts (`run`*SimulationCase*`.sh`) in `simulation` directory. Each simulation stores results in single CSV file in `simulations` directory. Name of that file depends on simulation scenario, for details refer to `simulations/ipin.ini`.
@@ -14,3 +19,5 @@ Individual simulation scenarios can be run using OMNET++ IDE in GUI mode and in 
 
 # Author
 Tomasz Jankowski <tomasz.jankowski AT pwr.edu.pl>
+
+
