@@ -5,6 +5,9 @@ import inet.networklayer.configurator.generic.GenericNetworkConfigurator;
 import inet.physicallayer.idealradio.IdealRadioMedium;
 import inet.visualizer.integrated.IntegratedCanvasVisualizer;
 
+//
+// Initial configuration for test cases involving grid of stationary mobile nodes.
+//
 network StationaryNetwork
 {
     parameters:
