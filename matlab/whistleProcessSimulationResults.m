@@ -56,8 +56,7 @@ for origSeqNoIdx = 1 : length(origSeqNums)
                       nonbaseAnchOrigFrame(1,ANCH_COORD_X) nonbaseAnchOrigFrame(1,ANCH_COORD_Y);
                       nonbaseAnchOrigFrame(2,ANCH_COORD_X) nonbaseAnchOrigFrame(2,ANCH_COORD_Y)];
 
-    position123 = tdoa_analytical_original(coordinates123, ...
-                                           [NaN, tD2S(1), tD2S(2)] .* C);
+    position123 = tdoa_analytical(coordinates123, [NaN, tD2S(1), tD2S(2)] .* C);
                                        
     % Reference mobile position
     refPosition = [baseAnchOrigFrame(MOB_COORD_X) baseAnchOrigFrame(MOB_COORD_Y)];
