@@ -22,11 +22,11 @@
 % To analyze perfect clock simulation omit "drift" and "seedNo" for 
 % stationary nodes:
 % 
-%     [result]=analyzeMovingNode('../tmp', 'tdoa', 100, 400)
+%     [result]=analyzeStationaryNode('../tmp', 'tdoa', 100, 400)
 %     
 % To analyze imperfect clock simulation pass "drift" and "seedNo":
 % 
-%     [result]=analyzeMovingNode('../tmp', 'tdoa', 100, 300, 10e-6, 3)
+%     [result]=analyzeStationaryNode('../tmp', 'tdoa', 100, 300, 10e-6, 3)
 %
 
 function [approxPos, realPos, absPosErrs, absErrStats] = analyzeStationaryNode(resultsDir, algoName, x, y, drift, seedNo)
