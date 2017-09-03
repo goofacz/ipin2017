@@ -48,7 +48,7 @@ for seqNo = 1 : max(results(:,SEQ_NO))
                      (((roundResults(2,RX_TS) - roundResults(1,RX_TS))) - sum(anchorTxDelays(2))) * C, ...
                      (((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C];
 
-    position123 = tdoa_analytical(coordinates123, timestamps123);
+    position123 = tdoaAnalytical(coordinates123, timestamps123);
     
     % Anchors 2 and 4 against anchor 3
 %     coordinates234 = [roundResults(3,ANCH_X_COORD), roundResults(3,ANCH_Y_COORD);
@@ -59,7 +59,7 @@ for seqNo = 1 : max(results(:,SEQ_NO))
 %                      (((roundResults(3,RX_TS) - roundResults(2,RX_TS))) - sum(anchorTxDelays(3))) * C, ...
 %                      (((roundResults(4,RX_TS) - roundResults(3,RX_TS))) - sum(anchorTxDelays(4))) * C];
 % 
-%     position234 = tdoa_analytical(coordinates234, timestamps234);
+%     position234 = tdoaAnalytical(coordinates234, timestamps234);
 
     % Reference mobile position
     refPosition = roundResults(2,MOB_X_COORD:MOB_Y_COORD);

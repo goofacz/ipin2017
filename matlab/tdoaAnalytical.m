@@ -3,7 +3,7 @@
 %
 % (matrix form)
 
-function position=tdoa_analytical(coordinates, t)
+function position=tdoaAnalytical(coordinates, t)
 
 
 L = t(2);
