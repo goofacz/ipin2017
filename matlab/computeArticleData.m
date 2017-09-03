@@ -1,3 +1,17 @@
+% Computes basic statistics used in article. Function computes absolute 
+% localization error (difference between position obtained from localization 
+% method and real position).
+%
+% INPUT (mandatory):
+% - results: data in format compliant with result of tdoaProcessSimulationResults()
+% 
+% OUTPUT:
+% - approxPos: n x 2 matrix with computed positions (X, Y) 
+% - realPos: n x 2 matrix with true positions (X, Y) 
+% - absPosErrs: vector with n elements containing absolute position errors 
+% - absErrStats: 1 x 4 matrix with statistics: min, max, avg, std 
+%                respectively.
+
 function [approxPos, realPos, absPosErrs, absErrStats] = computeArticleData(results)
 
 % Columns
